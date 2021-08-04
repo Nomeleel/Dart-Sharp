@@ -1,8 +1,10 @@
 import * as vscode from 'vscode';
-import { DatWrapCodeActionProvider } from './provider/dart_wrap_code_action_provider';
+import { ToggleFormatCommand } from './command/toggle_format_command';
 
 export function activate(context: vscode.ExtensionContext) {
 
+	/// Command
+	context.subscriptions.push(new ToggleFormatCommand());
 }
 
 export function deactivate() {}

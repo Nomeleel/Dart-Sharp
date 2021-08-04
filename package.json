@@ -15,7 +15,19 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-
+		"commands": [
+			{
+				"command": "dart_sharp.toggleFormat",
+				"title": "Toggle Format"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "dart_sharp.toggleFormat",
+				"key": "ctrl+tab",
+				"when": "editorLangId == dart"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
