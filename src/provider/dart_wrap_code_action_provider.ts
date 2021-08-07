@@ -1,4 +1,5 @@
-import { window, CodeAction, CodeActionProvider, CodeActionKind, Disposable, languages, commands, Position, Selection, TextEditor } from "vscode";
+import * as fs from "fs";
+import { CodeAction, CodeActionKind, CodeActionProvider, Disposable, languages, Position, Selection, TextEditor, window, workspace } from "vscode";
 import { DART_MODE } from "../constant/constant";
 
 const leftBracket = '(';
@@ -7,6 +8,7 @@ const rightBracket = ')';
 export class DatWrapCodeActionProvider implements CodeActionProvider {
 
   public disposables: Disposable[] = [];
+  public snippetList?: Snippet[];
 
   // this.disposables.push(window.onDidChangeActiveTextEditor((e) => );
   // this.disposables.push(workspace.onDidChangeTextDocument((e) => );
@@ -24,17 +26,19 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
     if (editor) {
       let selection = this.getWidgetSelection(editor);
       if (selection) {
-        const curText = editor.document.getText(selection);
-        return [
-          {
-            command: "dart-sharp.helloWorld2",
-            title: "Wrap with helloWorld2",
-          },
-        ].map((c) => {
-          let action = new CodeAction(c.title, CodeActionKind.Refactor);
+        const selectionText = editor.document.getText(selection);
+
+        // this.snippetList ??= await this.getSnippetList();
+        if (!this.snippetList) {
+          this.snippetList = await this.getSnippetList();
+        }
+    
+        return this.snippetList.map((snippet) => {
+          let action = new CodeAction(`Wrap with 👉${snippet.name}👈`, CodeActionKind.Refactor);
           action.command = {
-            command: c.command,
-            title: c.title,
+            title: snippet.name,
+            command: '',
+            arguments: [],
           };
           return action;
         });
@@ -66,7 +70,33 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
     }
   }
 
+  private async getSnippetList() : Promise<Snippet[]>{
+    let snippetFile = await workspace.findFiles('.vscode/wrap.code-snippets');
+    if (snippetFile.length > 0) {
+      let snippetContent = fs.readFileSync(snippetFile[0].path, 'utf-8');
+      let snippetMap = new Map(Object.entries<Snippet>(JSON.parse(snippetContent)));
+      let snippetList: Snippet[] = [];
+      snippetMap.forEach((snippet, name) => {
+        snippet.name = name;
+        snippetList.push(snippet);
+      });
+      return snippetList;
+    }
+
+    return [];
+  }
+
   public dispose(): any {
     this.disposables.forEach((e) => e.dispose());
   }
+}
+
+class Snippet {
+	public name: string;
+	public body: string;
+
+	constructor(name: string, body: string) {
+		this.name = name;
+		this.body = body;
+	}
 }
