@@ -1,24 +1,26 @@
 import * as fs from "fs";
-import { CodeAction, CodeActionKind, CodeActionProvider, Disposable, languages, Position, Selection, TextEditor, window, workspace } from "vscode";
+import { CodeAction, CodeActionKind, CodeActionProvider, Disposable, languages, Position, Selection, TextDocument, TextEditor, Uri, window, workspace } from "vscode";
 import { DART_MODE } from "../constant/constant";
 
 const leftBracket = '(';
 const rightBracket = ')';
-
+const snippetFilePath = '.vscode/wrap.code-snippets';
 export class DatWrapCodeActionProvider implements CodeActionProvider {
 
   public disposables: Disposable[] = [];
   public snippetList?: Snippet[];
 
   // this.disposables.push(window.onDidChangeActiveTextEditor((e) => );
-  // this.disposables.push(workspace.onDidChangeTextDocument((e) => );
   // this.disposables.push(workspace.onDidChangeConfiguration((e) => );
-
+  
   constructor() {
-    this.disposables.push(languages.registerCodeActionsProvider(
-      DART_MODE,
-      this
-    ));
+    this.disposables.push(
+      languages.registerCodeActionsProvider(
+        DART_MODE,
+        this
+      ),
+      workspace.onDidSaveTextDocument((e) => this.listenSnippetFile(e)),
+    );
   }
 
   public async provideCodeActions(): Promise<CodeAction[]> {
@@ -31,8 +33,9 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
         // this.snippetList ??= await this.getSnippetList();
         if (!this.snippetList) {
           this.snippetList = await this.getSnippetList();
+          if (!this.snippetList) return [];
         }
-    
+
         return this.snippetList.map((snippet) => {
           let action = new CodeAction(`Wrap with 👉${snippet.name}👈`, CodeActionKind.Refactor);
           action.command = {
@@ -70,10 +73,15 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
     }
   }
 
-  private async getSnippetList() : Promise<Snippet[]>{
-    let snippetFile = await workspace.findFiles('.vscode/wrap.code-snippets');
-    if (snippetFile.length > 0) {
-      let snippetContent = fs.readFileSync(snippetFile[0].path, 'utf-8');
+  private async getSnippetList(snippetFileUri? : Uri) : Promise<Snippet[] | undefined>{
+    if (!snippetFileUri) {
+      let snippetFile = await workspace.findFiles(snippetFilePath);
+      if (snippetFile.length == 0) return;
+      snippetFileUri = snippetFile[0];
+    }
+    
+    try {
+      let snippetContent = fs.readFileSync(snippetFileUri.path, 'utf-8');
       let snippetMap = new Map(Object.entries<Snippet>(JSON.parse(snippetContent)));
       let snippetList: Snippet[] = [];
       snippetMap.forEach((snippet, name) => {
@@ -81,9 +89,18 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
         snippetList.push(snippet);
       });
       return snippetList;
+    } catch (error) {
+      // TODO Snippet文件编辑过程中可能序列化失败, 忽略
     }
+  }
 
-    return [];
+  private async listenSnippetFile(textDocument: TextDocument) : Promise<any> {
+    if (textDocument.uri.path.endsWith(snippetFilePath)) {
+      let snippetList = await this.getSnippetList(textDocument.uri);
+      if (snippetList) {
+        this.snippetList = snippetList;
+      }
+    }
   }
 
   public dispose(): any {
