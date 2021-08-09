@@ -7,7 +7,7 @@ export class ToggleFormatCommand extends DisposableBase {
     super();
 
     this.disposables.push(
-      commands.registerCommand("dart_sharp.toggleFormat", this.toggleFormat, this),
+      commands.registerCommand('dart_sharp.toggleFormat', this.toggleFormat),
     );
   }
 

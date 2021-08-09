@@ -28,8 +28,6 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
     if (editor) {
       let selection = this.getWidgetSelection(editor);
       if (selection) {
-        const selectionText = editor.document.getText(selection);
-
         // this.snippetList ??= await this.getSnippetList();
         if (!this.snippetList) {
           this.snippetList = await this.getSnippetList();
@@ -40,8 +38,8 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
           let action = new CodeAction(`Wrap with 👉${snippet.name}👈`, CodeActionKind.Refactor);
           action.command = {
             title: snippet.name,
-            command: '',
-            arguments: [],
+            command: 'dart_sharp.wrapSnippet',
+            arguments: [selection, snippet.bodyText],
           };
           return action;
         });
@@ -85,8 +83,7 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
       let snippetMap = new Map(Object.entries<Snippet>(JSON.parse(snippetContent)));
       let snippetList: Snippet[] = [];
       snippetMap.forEach((snippet, name) => {
-        snippet.name = name;
-        snippetList.push(snippet);
+        snippetList.push(new Snippet(name, snippet.body));
       });
       return snippetList;
     } catch (error) {
@@ -110,9 +107,15 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
 
 class Snippet {
 	public name: string;
-	public body: string;
+	public body: string | string[];
+  public get bodyText() {
+    if (this.body instanceof Array) {
+      return this.body.join('\n');
+    }
+    return this.body.toString();
+}
 
-	constructor(name: string, body: string) {
+	constructor(name: string, body: string | string[]) {
 		this.name = name;
 		this.body = body;
 	}
