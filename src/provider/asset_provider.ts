@@ -1,12 +1,17 @@
-import { CancellationToken, DefinitionProvider, Disposable, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, ProviderResult, Range, TextDocument, Uri, workspace } from "vscode";
+import { CancellationToken, DefinitionProvider, Disposable, DocumentLink, DocumentLinkProvider, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, Range, TextDocument, Uri, workspace } from "vscode";
 import { DART_MODE } from "../constant/constant";
 
-export class AssetProvider implements DefinitionProvider, HoverProvider, Disposable {
+const assetRegExp = /(?<=[\"\'])\S+\.\S+(?=[\"\'])/gm;
+
+export class AssetProvider implements DefinitionProvider, HoverProvider, DocumentLinkProvider, Disposable {
   public disposables: Disposable[] = [];
 
   constructor() {
-    this.disposables.push(languages.registerDefinitionProvider(DART_MODE, this));
-    this.disposables.push(languages.registerHoverProvider(DART_MODE, this));
+    this.disposables.push(
+      languages.registerDefinitionProvider(DART_MODE, this),
+      languages.registerHoverProvider(DART_MODE, this),
+      languages.registerDocumentLinkProvider(DART_MODE, this),
+    );
   }
 
   public async provideDefinition(document: TextDocument, position: Position, token: CancellationToken): Promise<LocationLink[] | undefined> {
@@ -36,12 +41,39 @@ export class AssetProvider implements DefinitionProvider, HoverProvider, Disposa
     }
   }
 
+  public async provideDocumentLinks(document: TextDocument, token: CancellationToken): Promise<DocumentLink[] | undefined> {
+    let links: DocumentLink[] = [];
+    for (let line = 0; line < document.lineCount; line++) {
+      let textLine = document.lineAt(line);
+      // TODO 不支持跨行匹配
+      let matchArray = textLine.text.match(assetRegExp);
+      if (matchArray) {
+        let indexOfStart = 0;
+        for await (const match of matchArray) {
+          let findFiles = await this.findFiles(match);
+          if (findFiles.length > 0) {
+            let index = textLine.text.indexOf(match, indexOfStart);
+            indexOfStart = index + match.length;
+            links.push(
+              new DocumentLink(new Range(new Position(line, index), new Position(line, indexOfStart)), findFiles[0])
+            )
+          }
+        }
+      }
+    }
+    return links;
+  }
+
   private async getAssetUris(document: TextDocument, position: Position, pathRange?: Range):  Promise<Array<Uri> | undefined> {
-    pathRange = document.getWordRangeAtPosition(position, /(?<=[\"\'])\S+\.\S+(?=[\"\'])/);
+    pathRange = document.getWordRangeAtPosition(position, assetRegExp);
     if (pathRange) {
       const pathText = document.getText(pathRange);
-      return await workspace.findFiles(`**/${pathText}`, `build`);
+      return await this.findFiles(pathText);
     }
+  }
+
+  private async findFiles(pathText: string):  Promise<Array<Uri>> {
+    return await workspace.findFiles(`**/${pathText}`, 'build');
   }
 
   public dispose() {
