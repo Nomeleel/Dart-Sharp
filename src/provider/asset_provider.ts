@@ -1,7 +1,7 @@
 import { CancellationToken, DefinitionProvider, Disposable, DocumentLink, DocumentLinkProvider, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, Range, TextDocument, Uri, workspace } from "vscode";
 import { DART_MODE } from "../constant/constant";
 
-const assetRegExp = /(?<=[\"\'])\S+\.\S+(?=[\"\'])/gm;
+const assetRegExp = /(?<=[\"\'])[^\s:\.]+\.((?!dart).)+(?=[\"\'])/gm;
 
 export class AssetProvider implements DefinitionProvider, HoverProvider, DocumentLinkProvider, Disposable {
   public disposables: Disposable[] = [];
@@ -73,7 +73,10 @@ export class AssetProvider implements DefinitionProvider, HoverProvider, Documen
   }
 
   private async findFiles(pathText: string):  Promise<Array<Uri>> {
-    return await workspace.findFiles(`**/${pathText}`, 'build');
+    // 考虑**/**/3×/abc.png
+    let splitIndex = pathText.lastIndexOf('/') + 1;
+    let searchPath = `${pathText.substring(0, splitIndex)}**/${pathText.substring(splitIndex)}`
+    return await workspace.findFiles(searchPath, 'build');
   }
 
   public dispose() {
