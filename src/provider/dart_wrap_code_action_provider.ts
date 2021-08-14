@@ -10,15 +10,9 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
   public disposables: Disposable[] = [];
   public snippetList?: Snippet[];
 
-  // this.disposables.push(window.onDidChangeActiveTextEditor((e) => );
-  // this.disposables.push(workspace.onDidChangeConfiguration((e) => );
-  
   constructor() {
     this.disposables.push(
-      languages.registerCodeActionsProvider(
-        DART_MODE,
-        this
-      ),
+      languages.registerCodeActionsProvider(DART_MODE, this),
       workspace.onDidSaveTextDocument((e) => this.listenSnippetFile(e)),
     );
   }
@@ -51,7 +45,7 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
 
   private getWidgetSelection(editor: TextEditor): Selection | undefined {
     const document = editor.document;
-    let textRange = document.getWordRangeAtPosition(editor.selection.active, /(?<=\W+)(const )?[\w\.]*\(/); // (?=\()
+    let textRange = document.getWordRangeAtPosition(editor.selection.active, /(?<=\W+)(const )?[\w\.]*\(/);
     if (textRange) {
       for (let lineIndex = textRange.end.line, bracketCount = 1; lineIndex < document.lineCount; lineIndex++) {
         const curTextLine = document.lineAt(lineIndex);
