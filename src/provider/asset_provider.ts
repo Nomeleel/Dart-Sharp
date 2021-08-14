@@ -2,6 +2,7 @@ import { CancellationToken, DefinitionProvider, Disposable, DocumentLink, Docume
 import { DART_MODE } from "../constant/constant";
 
 const assetRegExp = /(?<=[\"\'])[^\s:\.]+\.((?!dart).)+(?=[\"\'])/gm;
+const matchAll = '**/';
 
 export class AssetProvider implements DefinitionProvider, HoverProvider, DocumentLinkProvider, Disposable {
   public disposables: Disposable[] = [];
@@ -75,7 +76,9 @@ export class AssetProvider implements DefinitionProvider, HoverProvider, Documen
   private async findFiles(pathText: string):  Promise<Array<Uri>> {
     // 考虑**/**/3×/abc.png
     let splitIndex = pathText.lastIndexOf('/') + 1;
-    let searchPath = `${pathText.substring(0, splitIndex)}**/${pathText.substring(splitIndex)}`
+    let pathDir = pathText.substring(0, splitIndex);
+    let searchDir = pathDir ? `${matchAll}${pathDir}${matchAll}` : matchAll;
+    let searchPath = `${searchDir}${pathText.substring(splitIndex)}`;
     return await workspace.findFiles(searchPath, 'build');
   }
 
