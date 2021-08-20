@@ -1,7 +1,7 @@
 import { CancellationToken, DefinitionProvider, Disposable, DocumentLink, DocumentLinkProvider, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, Range, TextDocument, Uri, workspace } from "vscode";
 import { DART_MODE } from "../constant/constant";
 
-const assetRegExp = /(?<=[\"\'])[^\s:\.]+\.((?!dart).)+(?=[\"\'])/gm;
+const assetRegExp = /(?<=[\"\'])[^\s:]+\.(jpg|png|webp|svg|json)(?=[\"\'])/gmi;
 const matchAll = '**/';
 
 export class AssetProvider implements DefinitionProvider, HoverProvider, DocumentLinkProvider, Disposable {
