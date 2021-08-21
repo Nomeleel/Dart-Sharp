@@ -1,7 +1,9 @@
 import { CancellationToken, DefinitionProvider, Disposable, DocumentLink, DocumentLinkProvider, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, Range, TextDocument, Uri, workspace } from "vscode";
 import { DART_MODE } from "../constant/constant";
 
-const assetRegExp = /(?<=[\"\'])[^\s:]+\.(jpg|png|webp|svg|json)(?=[\"\'])/gmi;
+const assetExtension = '(jpg|jpeg|png|webp|bmp|gif|svg|json)';
+const assetRegExp = new RegExp(`(?<=["'])[^\\s:]+\\.${assetExtension}(?=["'])`, 'gmi');
+const netAssetRegExp = new RegExp(`(?<=["'])https?://[^\\s:]+\\.${assetExtension}(?=["'])`, 'gmi');
 const matchAll = '**/';
 
 export class AssetProvider implements DefinitionProvider, HoverProvider, DocumentLinkProvider, Disposable {
@@ -40,6 +42,14 @@ export class AssetProvider implements DefinitionProvider, HoverProvider, Documen
         }
       ));
     }
+
+    // net asset
+    let pathText = this.getWordAtPosition(document, position, netAssetRegExp);
+    if (pathText) {
+      return new Hover(
+        new MarkdownString(`![${pathText}](${pathText})`, true)
+      )
+    }
   }
 
   public async provideDocumentLinks(document: TextDocument, token: CancellationToken): Promise<DocumentLink[] | undefined> {
@@ -66,10 +76,16 @@ export class AssetProvider implements DefinitionProvider, HoverProvider, Documen
   }
 
   private async getAssetUris(document: TextDocument, position: Position, pathRange?: Range):  Promise<Array<Uri> | undefined> {
-    pathRange = document.getWordRangeAtPosition(position, assetRegExp);
-    if (pathRange) {
-      const pathText = document.getText(pathRange);
+    let pathText = this.getWordAtPosition(document, position, assetRegExp, pathRange);
+    if (pathText) {
       return await this.findFiles(pathText);
+    }
+  }
+
+  private getWordAtPosition(document: TextDocument, position: Position, regex = assetRegExp, pathRange?: Range): string | undefined {
+    pathRange = document.getWordRangeAtPosition(position, regex);
+    if (pathRange) {
+      return document.getText(pathRange);
     }
   }
 
