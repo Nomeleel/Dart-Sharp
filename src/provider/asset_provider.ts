@@ -38,6 +38,7 @@ export class AssetProvider implements DefinitionProvider, HoverProvider, Documen
       return new Hover(
         uris.map((uri) => {
           // TODO: 可能不是图片
+          // TODO: 支持Webp格式
           return new MarkdownString(`![${uri.path}](${uri.path})`, true);
         }
       ));

@@ -34,3 +34,9 @@
   1. 可以添加官方插件所没有支持的Widget
   2. 可在设置中添加可以Wrap的Widget代码
   3. 设置项支持导入导出功能方便分享
+
+  # Pubspec.yaml 文件统一管理
+
+  1. 对所有pubspec.yaml执行pub get
+  2. 对其中pubspec.yaml的修改，所有引用当前package的执行pub get
+  3. 是否有必要写一个View
