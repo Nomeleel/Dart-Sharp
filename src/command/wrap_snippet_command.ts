@@ -1,5 +1,6 @@
-import { commands, Position, Range, Selection, SnippetString, window } from "vscode";
+import { commands, Position, Range, Selection, SnippetString, window, workspace } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
+import { DART_ENABLE_SDK_FORMATTER } from "../constant/constant";
 
 export class WrapSnippetCommand extends DisposableBase {
   constructor() {
@@ -20,6 +21,7 @@ export class WrapSnippetCommand extends DisposableBase {
       // 以上无需修正插入字符串缩进格式 直接局部格式化即可
       let lineCount = wrapedText.split('\n').length;
       editor.selection = new Selection(targetRange.start, new Position(targetRange.start.line + lineCount, 0));
+      workspace.getConfiguration().update(DART_ENABLE_SDK_FORMATTER, true, true);
       await commands.executeCommand('editor.action.formatSelection');
       editor.selection = new Selection(new Position(0, 0), new Position(0, 0));
     }
