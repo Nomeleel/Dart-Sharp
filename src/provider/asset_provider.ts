@@ -1,9 +1,11 @@
 import { CancellationToken, DefinitionProvider, Disposable, DocumentLink, DocumentLinkProvider, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, Range, TextDocument, Uri, workspace } from "vscode";
 import { DART_MODE } from "../constant/constant";
+import * as path from "path";
 
-const assetExtension = '(jpg|jpeg|png|webp|bmp|gif|svg|json)';
+const mdAssetExtension = 'jpg|jpeg|png|gif|gif|svg';
+const assetExtension = `(${mdAssetExtension}|webp|svga|json)`;
 const assetRegExp = new RegExp(`(?<=["'])[^\\s:]+\\.${assetExtension}(?=["'])`, 'gmi');
-const netAssetRegExp = new RegExp(`(?<=["'])https?://[^\\s:]+\\.${assetExtension}(?=["'])`, 'gmi');
+const netAssetRegExp = new RegExp(`(?<=["'])https?://[^\\s:]+\\.(${mdAssetExtension})(?=["'])`, 'gmi');
 const matchAll = '**/';
 
 export class AssetProvider implements DefinitionProvider, HoverProvider, DocumentLinkProvider, Disposable {
@@ -37,9 +39,9 @@ export class AssetProvider implements DefinitionProvider, HoverProvider, Documen
     if (uris) {
       return new Hover(
         uris.map((uri) => {
-          // TODO: 可能不是图片
-          // TODO: 支持Webp格式
-          return new MarkdownString(`![${uri.path}](${uri.path})`, true);
+          let supportMD = mdAssetExtension.includes(path.parse(uri.path).ext.substr(1));
+          let desc = supportMD ? uri.path : '😂 😂 😂 暂时不支持预览呦～😂 😂 😂';
+          return new MarkdownString(`![${desc}](${uri.path})`, true);
         }
       ));
     }
