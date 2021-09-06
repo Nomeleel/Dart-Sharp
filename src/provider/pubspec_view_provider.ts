@@ -6,13 +6,18 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
   protected disposables: Disposable[] = [];
 
   protected rootNode: PubspecItem | undefined;
+  
+  protected pubFiles: Array<Uri> | undefined;
 
   protected onDidChangeTreeDataEmitter: EventEmitter<PubspecItem | undefined> = new EventEmitter<PubspecItem | undefined>();
   public readonly onDidChangeTreeData: Event<PubspecItem | undefined> = this.onDidChangeTreeDataEmitter.event;
 
   constructor() {
     this.disposables.push(
-      window.createTreeView("pubspec.view", { treeDataProvider: this, showCollapseAll: true })
+      window.createTreeView("pubspec.view", { treeDataProvider: this, showCollapseAll: true }),
+      commands.registerCommand('dart_sharp.pub.get', () => this.pubGet()),
+      commands.registerCommand('dart_sharp.pub.upgrade', () => this.pubGet),
+      // cancel comamnd
     );
 
     this.listenerPubspecFile();
@@ -20,10 +25,10 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
 
   public async listenerPubspecFile() {
     this.onDidChangeTreeDataEmitter.fire(undefined);
-    let pubFiles = await workspace.findFiles('**/pubspec.yaml');
-    if (pubFiles.length > 0) {
+    this.pubFiles= await workspace.findFiles('**/pubspec.yaml');
+    if (this.pubFiles.length > 0) {
       this.rootNode = new PubspecItem('Pubspec View');
-      let children = pubFiles.map((p) => {
+      let children = this.pubFiles.map((p) => {
         let dirList = path.parse(p.path).dir.split(path.sep);
         let pub = new PubspecItem(dirList[dirList.length - 1], undefined, undefined, this.jumpToCommand(p.path));
         pub.setChildren([new PubspecItem(p.path)]);
@@ -34,6 +39,26 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
       this.rootNode = undefined;
     }
     this.onDidChangeTreeDataEmitter.fire(this.rootNode);
+  }
+
+  public async pubGet() {
+    this.pub('getPackages');
+  }
+
+  public async pubUpgrade() {
+    this.pub('upgradePackages');
+  }
+
+  // TODO: progress...
+  private async pub(command: string) {
+    if (this.pubFiles) {
+      for await (const pubFile of this.pubFiles) {
+        let result = await commands.executeCommand(`dart.${command}`, pubFile);
+        if (result === 0) {
+          console.log('success');
+        }
+      }
+    } 
   }
 
   public jumpToCommand(path: string, range?: Range): Command {

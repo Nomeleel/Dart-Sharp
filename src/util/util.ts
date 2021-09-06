@@ -1,5 +1,6 @@
-import { commands, Position, Range, TextEdit, TextEditor, Uri, window, workspace, WorkspaceEdit } from "vscode";
-
+import { join } from "path";
+import { commands, extensions, Position, Range, TextEdit, TextEditor, Uri, window, workspace, WorkspaceEdit } from "vscode";
+import { EXTENSION_NAME, PUBLISHER } from "../constant/constant";
 
 export async function openTextDocument(path: string) : Promise<TextEditor> {
   let textDocument = await workspace.openTextDocument(path);
@@ -77,4 +78,12 @@ export function getConfiguration<T>(key : string) : T {
 
 export function setGlobalConfiguration<T>(key : string, value: T) {
   return workspace.getConfiguration().update(key, value, true);
+}
+
+export function getExtensionPath() : string {
+  return extensions.getExtension(`${PUBLISHER}.${EXTENSION_NAME}`)!.extensionPath;
+}
+
+export function getExtensionIconPath(iconName: string): Uri {
+  return Uri.file(join(getExtensionPath(), 'resources', 'icons', iconName));
 }

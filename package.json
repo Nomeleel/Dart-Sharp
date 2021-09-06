@@ -3,7 +3,7 @@
 	"displayName": "dart sharp",
 	"description": "Dart Sharp extension.",
 	"publisher": "Nomeleel",
-	"version": "0.0.1",
+	"version": "0.0.1+1",
 	"engines": {
 		"vscode": "^1.46.0"
 	},
@@ -25,6 +25,24 @@
 			{
 				"command": "dart_sharp.toggleFormat",
 				"title": "Toggle Format"
+			},
+			{
+				"command": "dart_sharp.pub.get",
+				"title": "Get All Packages",
+				"category": "Pub",
+				"icon": {
+					"light": "./resource/icon/get_light.svg",
+					"dark": "./resource/icon/get_dark.svg"
+				}
+			},
+			{
+				"command": "dart_sharp.pub.upgrade",
+				"title": "Upgrade All Packages",
+				"category": "Pub",
+				"icon": {
+					"light": "./resource/icon/upgrade_light.svg",
+					"dark": "./resource/icon/upgrade_dark.svg"
+				}
 			}
 		],
 		"keybindings": [
@@ -33,7 +51,31 @@
 				"key": "ctrl+tab",
 				"when": "editorLangId == dart"
 			}
-		]
+		],
+		"views": {
+			"flutter": [
+				{
+					"id": "pubspec.view",
+					"name": "Pubspec",
+					"when": "dart-code:anyFlutterProjectLoaded && dart-code:showFlutterOutline"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "dart_sharp.pub.get",
+					"when": "view == pubspec.view",
+					"group": "navigation"
+				},
+				{
+					"command": "dart_sharp.pub.upgrade",
+					"when": "view == pubspec.view",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": []
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
