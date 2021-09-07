@@ -1,13 +1,16 @@
 import { Command, commands, Disposable, Event, EventEmitter, extensions, Position, Range, TextDocument, TextEditor, TreeDataProvider, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
 import * as path from "path";
+import { setContext } from "../util/util";
 
 export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Disposable {
 
   protected disposables: Disposable[] = [];
 
   protected rootNode: PubspecItem | undefined;
-  
+
   protected pubFiles: Array<Uri> | undefined;
+  
+  private pubCancel = false;
 
   protected onDidChangeTreeDataEmitter: EventEmitter<PubspecItem | undefined> = new EventEmitter<PubspecItem | undefined>();
   public readonly onDidChangeTreeData: Event<PubspecItem | undefined> = this.onDidChangeTreeDataEmitter.event;
@@ -16,8 +19,8 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
     this.disposables.push(
       window.createTreeView("pubspec.view", { treeDataProvider: this, showCollapseAll: true }),
       commands.registerCommand('dart_sharp.pub.get', () => this.pubGet()),
-      commands.registerCommand('dart_sharp.pub.upgrade', () => this.pubGet),
-      // cancel comamnd
+      commands.registerCommand('dart_sharp.pub.upgrade', () => this.pubUpgrade()),
+      commands.registerCommand('dart_sharp.pub.cancel', () => this.setPubCancel(false)),
     );
 
     this.listenerPubspecFile();
@@ -25,7 +28,7 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
 
   public async listenerPubspecFile() {
     this.onDidChangeTreeDataEmitter.fire(undefined);
-    this.pubFiles= await workspace.findFiles('**/pubspec.yaml');
+    this.pubFiles = await workspace.findFiles('**/pubspec.yaml');
     if (this.pubFiles.length > 0) {
       this.rootNode = new PubspecItem('Pubspec View');
       let children = this.pubFiles.map((p) => {
@@ -52,13 +55,25 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
   // TODO: progress...
   private async pub(command: string) {
     if (this.pubFiles) {
+      this.setPubCancel(true);
       for await (const pubFile of this.pubFiles) {
+        if (this.isCancel()) return;
         let result = await commands.executeCommand(`dart.${command}`, pubFile);
         if (result === 0) {
           console.log('success');
         }
       }
-    } 
+      this.setPubCancel(false);
+    }
+  }
+
+  private setPubCancel(cancel: boolean) {
+    this.pubCancel = cancel;
+    setContext('dart_sharp.pubCancel', this.pubCancel);
+  }
+
+  private isCancel() {
+    return !this.pubCancel;
   }
 
   public jumpToCommand(path: string, range?: Range): Command {

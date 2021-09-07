@@ -2,17 +2,17 @@ import { join } from "path";
 import { commands, extensions, Position, Range, TextEdit, TextEditor, Uri, window, workspace, WorkspaceEdit } from "vscode";
 import { EXTENSION_NAME, PUBLISHER } from "../constant/constant";
 
-export async function openTextDocument(path: string) : Promise<TextEditor> {
+export async function openTextDocument(path: string): Promise<TextEditor> {
   let textDocument = await workspace.openTextDocument(path);
   return await window.showTextDocument(textDocument);
 }
 
-export function activePositionText() : string | undefined {
-    if (window.activeTextEditor) {
-      let textEditor = window.activeTextEditor;
-      let document = textEditor.document;
-      return document.getText(document.getWordRangeAtPosition(textEditor.selection.active));
-    }
+export function activePositionText(): string | undefined {
+  if (window.activeTextEditor) {
+    let textEditor = window.activeTextEditor;
+    let document = textEditor.document;
+    return document.getText(document.getWordRangeAtPosition(textEditor.selection.active));
+  }
 }
 
 export async function dartFileEdit(textEdits: Array<TextEdit>, uri?: Uri) {
@@ -32,16 +32,16 @@ export async function dartOrganizeImports(uri?: Uri) {
   await commands.executeCommand('_dart.organizeImports', textDocument);
 }
 
-export async function realLineCount(uri: Uri) : Promise<number> {
+export async function realLineCount(uri: Uri): Promise<number> {
   let textDocument = await workspace.openTextDocument(uri);
   let lineCount: number = textDocument.lineCount;
-  while(textDocument.lineAt(lineCount - 1).isEmptyOrWhitespace) {
+  while (textDocument.lineAt(lineCount - 1).isEmptyOrWhitespace) {
     lineCount--;
   }
   return lineCount;
 }
 
-export async function getFillRange(uri: Uri) : Promise<Range>{
+export async function getFillRange(uri: Uri): Promise<Range> {
   let textDocument = await workspace.openTextDocument(uri);
   return new Range(new Position(0, 0), new Position(textDocument.lineCount + 1, 0));
 }
@@ -58,12 +58,12 @@ export function rangesOfOne(textEditor: TextEditor, searchText: string): Range |
   }
 }
 
-export function isString(string: any) : boolean {
+export function isString(string: any): boolean {
   // return Object.prototype.toString.call(string) === '[object String]';
-  return typeof(string) === 'string';
+  return typeof (string) === 'string';
 }
 
-export function first(map: Map<any, any>) : any | undefined {
+export function first(map: Map<any, any>): any | undefined {
   let first;
   map?.forEach((v, k) => {
     first = v;
@@ -72,18 +72,22 @@ export function first(map: Map<any, any>) : any | undefined {
   return first;
 }
 
-export function getConfiguration<T>(key : string) : T {
+export function getConfiguration<T>(key: string): T {
   return workspace.getConfiguration().get(key) as T;
 }
 
-export function setGlobalConfiguration<T>(key : string, value: T) {
+export function setGlobalConfiguration<T>(key: string, value: T) {
   return workspace.getConfiguration().update(key, value, true);
 }
 
-export function getExtensionPath() : string {
+export function getExtensionPath(): string {
   return extensions.getExtension(`${PUBLISHER}.${EXTENSION_NAME}`)!.extensionPath;
 }
 
 export function getExtensionIconPath(iconName: string): Uri {
   return Uri.file(join(getExtensionPath(), 'resources', 'icons', iconName));
+}
+
+export async function setContext(key: string, context: any): Promise<any> {
+  return await commands.executeCommand("setContext", key, context);
 }
