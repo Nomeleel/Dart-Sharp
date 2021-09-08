@@ -85,7 +85,7 @@ export function getExtensionPath(): string {
 }
 
 export function getExtensionIconPath(iconName: string): Uri {
-  return Uri.file(join(getExtensionPath(), 'resources', 'icons', iconName));
+  return Uri.file(join(getExtensionPath(), 'resource', 'icon', iconName));
 }
 
 export async function setContext(key: string, context: any): Promise<any> {
