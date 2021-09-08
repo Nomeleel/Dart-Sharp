@@ -1,5 +1,5 @@
 import { join } from "path";
-import { commands, extensions, Position, Range, TextEdit, TextEditor, Uri, window, workspace, WorkspaceEdit } from "vscode";
+import { commands, extensions, Position, Range, TextDocument, TextEdit, TextEditor, Uri, window, workspace, WorkspaceEdit } from "vscode";
 import { EXTENSION_NAME, PUBLISHER } from "../constant/constant";
 
 export async function openTextDocument(path: string): Promise<TextEditor> {
@@ -56,6 +56,11 @@ export function rangesOfOne(textEditor: TextEditor, searchText: string): Range |
       }
     }
   }
+}
+
+export function getRange(document: TextDocument, offset: number, length: number): Range {
+  let start = document.positionAt(offset);
+  return new Range(start, start.translate(0, length));
 }
 
 export function isString(string: any): boolean {

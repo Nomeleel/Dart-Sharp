@@ -1,6 +1,7 @@
 import { CancellationToken, DefinitionProvider, Disposable, DocumentLink, DocumentLinkProvider, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, Range, TextDocument, Uri, workspace } from "vscode";
 import { DART_MODE } from "../constant/constant";
 import * as path from "path";
+import { getFillRange, getRange } from "../util/util";
 
 const mdAssetExtension = 'jpg|jpeg|png|gif|gif|svg';
 const assetExtension = `(${mdAssetExtension}|webp|svga|json)`;
@@ -34,6 +35,22 @@ export class AssetProvider implements DefinitionProvider, HoverProvider, Documen
     }
   }
 
+  public async provideDocumentLinks(document: TextDocument, token: CancellationToken): Promise<DocumentLink[] | undefined> {
+    let links: DocumentLink[] = [];
+    let text = document.getText();
+    let match: RegExpExecArray | null;
+    
+    assetRegExp.lastIndex = -1;
+    while(match = assetRegExp.exec(text)) {
+      let range = getRange(document, match.index, match[0].length);
+      let findFiles = await this.findFiles(document.getText(range));
+      if (findFiles.length > 0) {
+        links.push(new DocumentLink(range, findFiles[0]));
+      }
+    }
+    return links;
+  }
+
   public async provideHover(document: TextDocument, position: Position, token: CancellationToken): Promise<Hover | undefined> {
     let uris = await this.getAssetUris(document, position);
     if (uris) {
@@ -55,7 +72,7 @@ export class AssetProvider implements DefinitionProvider, HoverProvider, Documen
     }
   }
 
-  public async provideDocumentLinks(document: TextDocument, token: CancellationToken): Promise<DocumentLink[] | undefined> {
+  public async provideDocumentLinks2(document: TextDocument, token: CancellationToken): Promise<DocumentLink[] | undefined> {
     let links: DocumentLink[] = [];
     for (let line = 0; line < document.lineCount; line++) {
       let textLine = document.lineAt(line);
