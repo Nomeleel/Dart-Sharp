@@ -1,6 +1,6 @@
-import { Command, commands, Disposable, Event, EventEmitter, extensions, Position, Range, TextDocument, TextEditor, TreeDataProvider, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
 import * as path from "path";
-import { setContext } from "../util/util";
+import { Command, commands, Disposable, Event, EventEmitter, Range, TreeDataProvider, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
+import { getExtensionIconPath, setContext } from "../util/util";
 
 export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Disposable {
 
@@ -8,6 +8,7 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
 
   protected rootNode: PubspecItem | undefined;
 
+  // TODO remove...
   protected pubFiles: Array<Uri> | undefined;
   
   private pubCancel = false;
@@ -28,13 +29,13 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
 
   public async listenerPubspecFile() {
     this.onDidChangeTreeDataEmitter.fire(undefined);
-    this.pubFiles = await workspace.findFiles('**/pubspec.yaml');
+    this.pubFiles = await workspace.findFiles('**/pubspec.yaml', 'ios');
     if (this.pubFiles.length > 0) {
       this.rootNode = new PubspecItem('Pubspec View');
-      let children = this.pubFiles.map((p) => {
-        let dirList = path.parse(p.path).dir.split(path.sep);
-        let pub = new PubspecItem(dirList[dirList.length - 1], undefined, undefined, this.jumpToCommand(p.path));
-        pub.setChildren([new PubspecItem(p.path)]);
+      let children = this.pubFiles.map((uri) => {
+        let dirList = path.parse(uri.path).dir.split(path.sep);
+        let pub = new PubspecItem(dirList[dirList.length - 1], uri, undefined, this.jumpToCommand(uri.path));
+        pub.setChildren([new PubspecItem(uri.path)]);
         return pub;
       });
       this.rootNode.setChildren(children);
@@ -52,15 +53,15 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
     this.pub('upgradePackages');
   }
 
-  // TODO: progress...
   private async pub(command: string) {
     if (this.pubFiles) {
       this.setPubCancel(true);
-      for await (const pubFile of this.pubFiles) {
-        if (this.isCancel()) return;
-        let result = await commands.executeCommand(`dart.${command}`, pubFile);
-        if (result === 0) {
-          console.log('success');
+      this.pubActionInit();
+      for await (const pubFile of this.rootNode!.children) {
+        if (!this.isCancel()) {
+          await this.pubItemAction(pubFile, async (pub: PubspecItem) => {
+            return await commands.executeCommand(`dart.${command}`, pub.uri);
+          })
         }
       }
       this.setPubCancel(false);
@@ -74,6 +75,29 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
 
   private isCancel() {
     return !this.pubCancel;
+  }
+
+  private async pubActionInit() {
+    this.rootNode?.children?.forEach((pub) => pub.updateIconPath(true));
+    this.updatePubspecView();
+  }
+
+  private async pubItemAction(item: PubspecItem, action: Function) {
+    this.updatePubItem(item);
+    // TODO  status...
+    let result = await action(item);
+    this.updatePubItem(item);
+  }
+
+  private updatePubItem(item: PubspecItem) {
+    item.updateIconPath();
+    this.updatePubspecView();
+  }
+
+  private updatePubspecView() {
+    this.onDidChangeTreeDataEmitter.fire(undefined);
+    console.log(this.rootNode);
+    this.onDidChangeTreeDataEmitter.fire(this.rootNode);
   }
 
   public jumpToCommand(path: string, range?: Range): Command {
@@ -114,12 +138,16 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
 export class PubspecItem extends TreeItem {
   public parent: PubspecItem | undefined;
   public children: PubspecItem[] = [];
+  public uri?: Uri;
+  public progress: Progress;
 
-  constructor(title: string, iconPath?: Uri, description?: string, command?: Command) {
+  constructor(title: string, uri?: Uri, description?: string, command?: Command) {
     super(title);
-    this.iconPath = iconPath;
+    this.uri = uri;
+    this.progress = new Progress();
     this.command = command;
     this.description = description;
+    this.updateIconPath();
   }
 
   public setChildren(children: PubspecItem[]) {
@@ -128,7 +156,40 @@ export class PubspecItem extends TreeItem {
       TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.None;
   }
 
+  public updateIconPath(reset = false) {
+    if (reset) this.progress.reset();
+    this.iconPath = getExtensionIconPath(this.progress.currentAndNext());
+  }
+
   public equal(PubspecItem: PubspecItem): boolean {
     return this.label === PubspecItem.label && this.description === PubspecItem.description;
+  }
+}
+
+export class Progress {
+  private progress = 0;
+
+  public static progressMap : Map<number, string | undefined> = new Map([
+    [0, undefined],
+    [1, 'cancel.png'],
+    [2, 'get_dark.svg'],
+  ]);
+
+  public next() {
+    this.progress = (this.progress + 1) % Progress.progressMap.size;
+  }
+
+  public current(): string | undefined {
+    return Progress.progressMap.get(this.progress);
+  }
+
+  public currentAndNext(): string | undefined {
+    let current = this.current();
+    this.next();
+    return current;
+  }
+
+  public reset() {
+    this.progress = 0;
   }
 }

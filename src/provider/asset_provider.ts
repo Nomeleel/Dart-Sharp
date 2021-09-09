@@ -1,7 +1,7 @@
+import * as path from "path";
 import { CancellationToken, DefinitionProvider, Disposable, DocumentLink, DocumentLinkProvider, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, Range, TextDocument, Uri, workspace } from "vscode";
 import { DART_MODE } from "../constant/constant";
-import * as path from "path";
-import { getFillRange, getRange } from "../util/util";
+import { getRange } from "../util/util";
 
 const mdAssetExtension = 'jpg|jpeg|png|gif|gif|svg';
 const assetExtension = `(${mdAssetExtension}|webp|svga|json)`;

@@ -88,7 +88,8 @@ export function getExtensionPath(): string {
   return extensions.getExtension(`${PUBLISHER}.${EXTENSION_NAME}`)!.extensionPath;
 }
 
-export function getExtensionIconPath(iconName: string): Uri {
+export function getExtensionIconPath(iconName?: string): Uri | undefined {
+  if (!iconName) return undefined;
   return Uri.file(join(getExtensionPath(), 'resource', 'icon', iconName));
 }
 
