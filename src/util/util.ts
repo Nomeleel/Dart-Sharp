@@ -59,8 +59,7 @@ export function rangesOfOne(textEditor: TextEditor, searchText: string): Range |
 }
 
 export function getRange(document: TextDocument, offset: number, length: number): Range {
-  let start = document.positionAt(offset);
-  return new Range(start, start.translate(0, length));
+  return new Range(document.positionAt(offset), document.positionAt(offset + length));
 }
 
 export function isString(string: any): boolean {
