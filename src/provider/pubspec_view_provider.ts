@@ -33,9 +33,11 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
     if (this.pubFiles.length > 0) {
       this.rootNode = new PubspecItem('Pubspec View');
       let children = this.pubFiles.map((uri) => {
+        let relativePath = workspace.asRelativePath(uri);
         let dirList = path.parse(uri.path).dir.split(path.sep);
-        let pub = new PubspecItem(dirList[dirList.length - 1], uri, undefined, this.jumpToCommand(uri.path));
-        pub.setChildren([new PubspecItem(uri.path)]);
+        let command = this.jumpToCommand(uri.path);
+        let pub = new PubspecItem(dirList[dirList.length - 1], uri, command);
+        pub.setChildren([new PubspecItem(relativePath, uri, command)]);
         return pub;
       });
       this.rootNode.setChildren(children);
@@ -60,7 +62,7 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
       for await (const pubFile of this.rootNode!.children) {
         if (!this.isCancel()) {
           await this.pubItemAction(pubFile, async (pub: PubspecItem) => {
-            return await commands.executeCommand(`dart.${command}`, pub.uri);
+            return await commands.executeCommand(`dart.${command}`, pub.resourceUri);
           })
         }
       }
@@ -138,12 +140,11 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
 export class PubspecItem extends TreeItem {
   public parent: PubspecItem | undefined;
   public children: PubspecItem[] = [];
-  public uri?: Uri;
   public progress: Progress;
 
-  constructor(title: string, uri?: Uri, description?: string, command?: Command) {
+  constructor(title: string, uri?: Uri, command?: Command, description?: string) {
     super(title);
-    this.uri = uri;
+    this.resourceUri = uri;
     this.progress = new Progress();
     this.command = command;
     this.description = description;
