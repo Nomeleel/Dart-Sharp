@@ -3,7 +3,12 @@
 	"displayName": "dart sharp",
 	"description": "Dart Sharp extension.",
 	"publisher": "Nomeleel",
-	"version": "0.0.1+1",
+	"homepage": "https://github.com/Nomeleel",
+  "repository": {
+		"type": "git",
+		"url": "https://github.com/Nomeleel/VS-Code-Extension-Collection/tree/master/dart%20sharp"
+	},
+	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.46.0"
 	},
@@ -20,6 +25,7 @@
 		"workspaceContains:*/*/*.dart"
 	],
 	"main": "./out/extension.js",
+  "icon": "resource/icon/dart_sharp.png",
 	"contributes": {
 		"commands": [
 			{
@@ -84,8 +90,7 @@
 					"when": "view == pubspec.view && dart_sharp.pubCancel",
 					"group": "navigation"
 				}
-			],
-			"view/item/context": []
+			]
 		}
 	},
 	"scripts": {
