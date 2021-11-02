@@ -16,8 +16,9 @@ export class WrapSnippetCommand extends DisposableBase {
     const editor = window.activeTextEditor;
     if (editor) {
       const targetText = editor.document.getText(targetRange);
-      const wrapedText = wrapSnippet.replace(wrapFlag, targetText);
-      editor.insertSnippet(new SnippetString(wrapedText), targetRange);
+      // insertSnippet会执行文本中的$表达式, 这里先转义, 等执行时负负得正抵消掉转义
+      const wrapedText = wrapSnippet.replace(wrapFlag, targetText.replace(/\$/g, '\\$'));
+      await editor.insertSnippet(new SnippetString(wrapedText), targetRange);
 
       // 插入未引入的符号 尝试进行引入
       const codeActions = await (commands.executeCommand("vscode.executeCodeActionProvider", editor.document.uri, targetRange) as Thenable<CodeAction[]>);
