@@ -1,6 +1,6 @@
-import { commands, ConfigurationTarget, window, workspace } from "vscode";
+import { commands, window } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
-import { DART_ENABLE_SDK_FORMATTER } from "../constant/constant";
+import { getFormatConfig, setFormatConfig } from "../util/format";
 
 export class ToggleFormatCommand extends DisposableBase {
   constructor() {
@@ -12,9 +12,9 @@ export class ToggleFormatCommand extends DisposableBase {
   }
 
   public toggleFormat() {
-    let current = workspace.getConfiguration().get(DART_ENABLE_SDK_FORMATTER);
+    let current = getFormatConfig();
     if (current !== undefined) {
-      workspace.getConfiguration().update(DART_ENABLE_SDK_FORMATTER, !current, ConfigurationTarget.Global, true);
+      setFormatConfig(!current);
       let msg = current ? '小弟, 你歇一歇, 格式化常规操作我自己来～～～' : '主人, 你随便写, 格式化就交给我吧～～～';
       window.showInformationMessage(`😊 😊 😊 ${msg}😊 😊 😊`);
     } else {
