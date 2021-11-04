@@ -96,3 +96,11 @@ export function getExtensionIconPath(iconName?: string): Uri | undefined {
 export async function setContext(key: string, context: any): Promise<any> {
   return await commands.executeCommand("setContext", key, context);
 }
+
+// Copy from dart extension.
+// https://github.com/Dart-Code/Dart-Code/blob/master/src/extension/analysis/analyzer_lsp_snippet_text_edits.ts#L73
+export function compensateForVsCodeIndenting(newText: string, leadingIndentCharacters: number) {
+  const indent = " ".repeat(leadingIndentCharacters);
+  const indentPattern = new RegExp(`\n${indent}`, "g");
+  return newText.replace(indentPattern, "\n");
+}
