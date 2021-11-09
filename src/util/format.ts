@@ -9,6 +9,10 @@ export async function setFormatConfig(config: boolean) {
   await workspace.getConfiguration().update(DART_ENABLE_SDK_FORMATTER, config, ConfigurationTarget.Global, true);
 }
 
+export function formatEnabled(): boolean {
+  return getFormatConfig() ? true : false;
+}
+
 export function formatAvailable(): boolean {
   return getFormatConfig() !== undefined;
 }
