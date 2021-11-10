@@ -1,6 +1,6 @@
 import { DisposableBase } from "../common/disposable_base";
-import { ColorDecoration, ColorDecorationConfig, ColorRangeComputerARGBProvider } from 'color-decoration/dist';
 import { getExtensionPath } from "../util/util";
+import { ColorDecoration, ColorDecorationConfig, ColorRangeComputerARGBProvider} from "./color-decoration/index";
 
 export class DartColorDecoration extends DisposableBase  {
 
