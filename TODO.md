@@ -40,3 +40,8 @@
   1. 对所有pubspec.yaml执行pub get
   2. 对其中pubspec.yaml的修改，所有引用当前package的执行pub get
   3. 是否有必要写一个View
+
+# 注释体验增强
+ 
+  1. 符号命中跳转(关注[]中的符号)
+  2. Example代码提供复制功能(提取```dart```中内容)
