@@ -12,7 +12,7 @@ export class WrapSnippetCommand extends DisposableBase {
     );
   }
 
-  public async wrapSnippet(targetRange: Range, wrapSnippet: string, wrapFlag = '${WIDGET}') {
+  public async wrapSnippet(targetRange: Range, wrapSnippet: string, wrapFlag = /\$({(WIDGET|0:[^\n}]*)}|0)/) {
     if (!targetRange || !wrapSnippet) return;
     const editor = window.activeTextEditor;
     if (editor) {
