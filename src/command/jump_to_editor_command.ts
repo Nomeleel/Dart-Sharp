@@ -1,5 +1,6 @@
 import { commands, Position, Range, Selection, TextEditor, TextEditorRevealType, window } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
+import { JUMP_TO_EDITOR_COMMAND } from "../constant/constant";
 import { isString, openTextDocument, rangesOfOne } from "../util/util";
 
 export class JumpToEditorCommand extends DisposableBase  {
@@ -7,7 +8,7 @@ export class JumpToEditorCommand extends DisposableBase  {
 	constructor() {
     super();
 		this.disposables.push(
-			commands.registerCommand("dart_sharp.jumpToEditor", JumpToEditorCommand.jumpToEditor, this),
+			commands.registerCommand(JUMP_TO_EDITOR_COMMAND, JumpToEditorCommand.jumpToEditor, this),
 		);
   }
 

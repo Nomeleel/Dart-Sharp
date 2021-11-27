@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { CodeAction, CodeActionKind, CodeActionProvider, Disposable, languages, Position, Selection, TextDocument, TextEditor, Uri, window, workspace } from "vscode";
-import { DART_MODE } from "../constant/constant";
+import { DART_MODE, WRAP_SNIPPET_COMMAND } from "../constant/constant";
 
 const leftBracket = '(';
 const rightBracket = ')';
@@ -32,7 +32,7 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
           let action = new CodeAction(`Wrap with 👉${snippet.name}👈`, CodeActionKind.Refactor);
           action.command = {
             title: snippet.name,
-            command: 'dart_sharp.wrapSnippet',
+            command: WRAP_SNIPPET_COMMAND,
             arguments: [selection, snippet.bodyText],
           };
           return action;

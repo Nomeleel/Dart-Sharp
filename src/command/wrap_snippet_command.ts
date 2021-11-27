@@ -1,5 +1,6 @@
 import { CodeAction, commands, Position, Range, Selection, SnippetString, window, workspace } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
+import { WRAP_SNIPPET_COMMAND } from "../constant/constant";
 import { formatEnabled, formatScope, formatSelection } from "../util/format";
 import { compensateForVsCodeIndenting } from "../util/util";
 
@@ -8,7 +9,7 @@ export class WrapSnippetCommand extends DisposableBase {
     super();
 
     this.disposables.push(
-      commands.registerCommand('dart_sharp.wrapSnippet', this.wrapSnippet),
+      commands.registerCommand(WRAP_SNIPPET_COMMAND, this.wrapSnippet),
     );
   }
 

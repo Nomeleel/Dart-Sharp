@@ -1,5 +1,6 @@
 import { commands, window } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
+import { TOGGLE_FORMAT_COMMAND } from "../constant/constant";
 import { getFormatConfig, setFormatConfig } from "../util/format";
 
 export class ToggleFormatCommand extends DisposableBase {
@@ -7,7 +8,7 @@ export class ToggleFormatCommand extends DisposableBase {
     super();
 
     this.disposables.push(
-      commands.registerCommand('dart_sharp.toggleFormat', this.toggleFormat),
+      commands.registerCommand(TOGGLE_FORMAT_COMMAND, this.toggleFormat),
     );
   }
 

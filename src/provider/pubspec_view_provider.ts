@@ -1,5 +1,6 @@
 import * as path from "path";
 import { Command, commands, Disposable, Event, EventEmitter, Range, TreeDataProvider, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
+import { JUMP_TO_EDITOR_COMMAND } from "../constant/constant";
 import { getExtensionIconPath, setContext } from "../util/util";
 
 export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Disposable {
@@ -104,7 +105,7 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
 
   public jumpToCommand(path: string, range?: Range): Command {
     return {
-      command: "dart_sharp.jumpToEditor",
+      command: JUMP_TO_EDITOR_COMMAND,
       arguments: [
         path,
         range,

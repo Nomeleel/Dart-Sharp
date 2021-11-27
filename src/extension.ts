@@ -6,6 +6,7 @@ import { DartColorDecoration } from './decoration/dart_color_decoration';
 import { AssetProvider } from './provider/asset_provider';
 import { DatWrapCodeActionProvider } from './provider/dart_wrap_code_action_provider';
 import { PubspecViewProvider } from './provider/pubspec_view_provider';
+import { FormatStatusBar } from './statusbar/format_status_bar';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -21,6 +22,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   /// Decoration
   context.subscriptions.push(new DartColorDecoration());
+
+  /// Status Bar
+  context.subscriptions.push(new FormatStatusBar);
 }
 
 export function deactivate() {}
