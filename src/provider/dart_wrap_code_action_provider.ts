@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import { CodeAction, CodeActionKind, CodeActionProvider, Disposable, languages, Position, Selection, TextDocument, TextEditor, Uri, window, workspace } from "vscode";
 import { DART_MODE, WRAP_SNIPPET_COMMAND } from "../constant/constant";
+import { getExtensionSnippetPath } from "../util/util";
 
 const leftBracket = '(';
 const rightBracket = ')';
@@ -8,12 +9,13 @@ const snippetFilePath = '.vscode/wrap.code-snippets';
 export class DatWrapCodeActionProvider implements CodeActionProvider {
 
   public disposables: Disposable[] = [];
-  public snippetList?: Snippet[];
+  public commonSnippetList?: Snippet[];
+  public customSnippetList?: Snippet[];
 
   constructor() {
     this.disposables.push(
       languages.registerCodeActionsProvider(DART_MODE, this),
-      workspace.onDidSaveTextDocument((e) => this.listenSnippetFile(e)),
+      workspace.onDidSaveTextDocument((e) => this.listenCustomSnippetFile(e)),
     );
   }
 
@@ -22,13 +24,15 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
     if (editor) {
       let selection = this.getWidgetSelection(editor);
       if (selection) {
-        // this.snippetList ??= await this.getSnippetList();
-        if (!this.snippetList) {
-          this.snippetList = await this.getSnippetList();
-          if (!this.snippetList) return [];
+        if (!this.commonSnippetList) {
+          this.commonSnippetList = await this.getCommonSnippetList();
         }
 
-        return this.snippetList.map((snippet) => {
+        if (!this.customSnippetList) {
+          this.customSnippetList = await this.getSnippetList();
+        }
+
+        return [...this.commonSnippetList, ...(this.customSnippetList ?? [])].map((snippet) => {
           let action = new CodeAction(`Wrap with 👉${snippet.name}👈`, CodeActionKind.Refactor);
           action.command = {
             title: snippet.name,
@@ -65,6 +69,10 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
     }
   }
 
+  private async getCommonSnippetList() : Promise<Snippet[]>{
+    return (await this.getSnippetList(getExtensionSnippetPath('wrap.json'))) ?? [];
+  }
+
   private async getSnippetList(snippetFileUri? : Uri) : Promise<Snippet[] | undefined>{
     if (!snippetFileUri) {
       let snippetFile = await workspace.findFiles(snippetFilePath);
@@ -85,11 +93,11 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
     }
   }
 
-  private async listenSnippetFile(textDocument: TextDocument) : Promise<any> {
+  private async listenCustomSnippetFile(textDocument: TextDocument) : Promise<any> {
     if (textDocument.uri.path.endsWith(snippetFilePath)) {
       let snippetList = await this.getSnippetList(textDocument.uri);
       if (snippetList) {
-        this.snippetList = snippetList;
+        this.customSnippetList = snippetList;
       }
     }
   }

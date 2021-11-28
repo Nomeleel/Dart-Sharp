@@ -93,6 +93,10 @@ export function getExtensionIconPath(iconName?: string): Uri | undefined {
   return Uri.file(join(getExtensionPath(), 'resource', 'icon', iconName));
 }
 
+export function getExtensionSnippetPath(snippetName?: string): Uri | undefined {
+  return Uri.file(join(getExtensionPath(), 'snippets', snippetName ?? ''));
+}
+
 export async function setContext(key: string, context: any): Promise<any> {
   return await commands.executeCommand("setContext", key, context);
 }

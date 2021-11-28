@@ -13,7 +13,8 @@
 		"vscode": "^1.46.0"
 	},
 	"categories": [
-		"Other"
+    "Snippets",
+		"Programming Languages"
 	],
 	"activationEvents": [
 		"onLanguage:dart",
@@ -91,7 +92,13 @@
 					"group": "navigation"
 				}
 			]
-		}
+		},
+    "snippets": [
+			{
+				"language": "dart",
+				"path": "./snippets/wrap.json"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
