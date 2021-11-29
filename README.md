@@ -14,7 +14,11 @@ Dart extension plus, 在Dart插件的基础上扩展一些稀奇古怪的功能�
 ![wrap](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/wrap.gif)
 
 自定义snippet文件目录: ***.vscode/wrap.code-snippets***
-替换标识位: ***${WIDGET}***
+替换标识位: ***推荐使用后两种***(更符合[Snippet Syntax](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax))
+  1. ***${WIDGET}***
+  2. ***$0***
+  3. ***${0:xxx}***
+
 试例: ***Padding***
 ```json
 {
@@ -32,7 +36,7 @@ Dart extension plus, 在Dart插件的基础上扩展一些稀奇古怪的功能�
       "\t\tleft: ${3:0.0},",
       "\t\tright: ${4:0.0},",
       "\t),",
-      "\tchild: ${WIDGET},",
+      "\tchild: $0,",
       ")"
     ],
     "description": "Add Padding..."
@@ -40,7 +44,7 @@ Dart extension plus, 在Dart插件的基础上扩展一些稀奇古怪的功能�
 }
 ```
 
-***另外:*** 该文件中配置的snippet还可以在当前项目中，通过预设的prefix进行响应，一举两得。
+***另外:*** 该文件中配置的snippet还可以在当前项目中，通过预设的prefix进行响应，一举两得。(这也是推荐使用后两种替换标识位的原因)
 
 ## Pubspec视图
 
