@@ -1,0 +1,24 @@
+{
+  "Wrap": {
+    "prefix": [
+      "wrap"
+    ],
+    "scope": "json",
+    "body": [
+      "\"$1\": {",
+      "\t\"prefix\": [",
+      "\t\t\"${1/(.*)/${1:/downcase}/}\",",
+      "\t\t\"$1\"",
+      "\t],",
+      "\t\"scope\": \"dart\",",
+      "\t\"body\": [",
+      "\t\t\"$1(\",",
+      "\t\t\"\\tchild: \\$0,\",",
+      "\t\t\")\"",
+      "\t],",
+      "\t\"description\": \"Warp with / Add $1...\"",
+      "}"
+    ],
+    "description": "Add Wrap snippet..."
+  }
+}

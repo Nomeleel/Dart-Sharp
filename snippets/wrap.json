@@ -1,0 +1,162 @@
+{
+  "Column": {
+    "prefix": [
+      "column",
+      "Column"
+    ],
+    "scope": "dart",
+    "body": [
+      "Column(",
+      "\tchildren: [",
+      "\t\t$0,",
+      "\t],",
+      ")"
+    ],
+    "description": "Warp with / Add Column..."
+  },
+  "Expanded": {
+    "prefix": [
+      "expanded",
+      "Expanded"
+    ],
+    "scope": "dart",
+    "body": [
+      "Expanded(",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Warp with / Add Expanded..."
+  },
+  "Flex": {
+    "prefix": [
+      "Flex",
+      "Flex"
+    ],
+    "scope": "dart",
+    "body": [
+      "Flex(",
+      "\tchildren: [",
+      "\t\t$0,",
+      "\t],",
+      ")"
+    ],
+    "description": "Warp with / Add Flex..."
+  },
+  "Flexible": {
+    "prefix": [
+      "flexible",
+      "Flexible"
+    ],
+    "scope": "dart",
+    "body": [
+      "Flexible(",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Warp with / Add Flexible..."
+  },
+  "GestureDetector": {
+    "prefix": [
+      "gesturedetector",
+      "GestureDetector"
+    ],
+    "scope": "dart",
+    "body": [
+      "GestureDetector(",
+      "\tonTap: () {},",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Warp with / Add GestureDetector..."
+  },
+  "KeyedSubtree": {
+    "prefix": [
+      "keyedsubtree",
+      "KeyedSubtree"
+    ],
+    "scope": "dart",
+    "body": [
+      "KeyedSubtree(",
+      "\tkey: UniqueKey(),",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Warp with / Add KeyedSubtree..."
+  },
+  "Opacity": {
+    "prefix": [
+      "opacity",
+      "Opacity"
+    ],
+    "scope": "dart",
+    "body": [
+      "Opacity(",
+      "\topacity: ${1:.2},",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Warp with / Add Opacity..."
+  },
+  "Positioned": {
+    "prefix": [
+      "positioned",
+      "Positioned"
+    ],
+    "scope": "dart",
+    "body": [
+      "Positioned(",
+      "\tleft: ${1:0.0},",
+      "\ttop: ${2:0.0},",
+      "\tright: ${3:0.0},",
+      "\tbottom: ${4:0.0},",
+      "\twidth: ${5:0.0},",
+      "\theight: ${6:0.0},",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Warp with / Add Positioned..."
+  },
+  "Row": {
+    "prefix": [
+      "row",
+      "Row"
+    ],
+    "scope": "dart",
+    "body": [
+      "Row(",
+      "\tchildren: [",
+      "\t\t$0,",
+      "\t],",
+      ")"
+    ],
+    "description": "Warp with / Add Row..."
+  },
+  "SingleChildScrollView": {
+    "prefix": [
+      "singlechildscrollview",
+      "SingleChildScrollView"
+    ],
+    "scope": "dart",
+    "body": [
+      "SingleChildScrollView(",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Warp with / Add SingleChildScrollView..."
+  },
+  "Stack": {
+    "prefix": [
+      "stack",
+      "Stack"
+    ],
+    "scope": "dart",
+    "body": [
+      "Stack(",
+      "\tchildren: [",
+      "\t\t$0,",
+      "\t],",
+      ")"
+    ],
+    "description": "Warp with / Add Stack..."
+  }
+}
