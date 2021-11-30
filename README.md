@@ -9,6 +9,10 @@ Dart extension plus, 在Dart插件的基础上扩展一些稀奇古怪的功能�
 
 ![format](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/format.gif)
 
+### 格式化状态在底部状态栏显示
+
+![format_status_bar](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/format_status_bar.gif)
+
 ## 嵌套自定义Widget
 
 ![wrap](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/wrap.gif)
@@ -45,6 +49,10 @@ Dart extension plus, 在Dart插件的基础上扩展一些稀奇古怪的功能�
 ```
 
 ***另外:*** 该文件中配置的snippet还可以在当前项目中，通过预设的prefix进行响应，一举两得。(这也是推荐使用后两种替换标识位的原因)
+
+### 同时内置了一些比较通用的Widget可供嵌套使用
+
+![wrap_common_snippet](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/wrap_common_snippet.png)
 
 ## Pubspec视图
 
