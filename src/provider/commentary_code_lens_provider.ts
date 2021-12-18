@@ -3,7 +3,10 @@ import { DART_MODE } from "../constant/constant";
 import { getRangeText } from "../util/document";
 import { getRange } from "../util/util";
 
-const dartCodeRegExp = /(?<=\/\/\/ ```dart\n)[^`]*(?=\n\/\/\/ ```)/gmi;
+const documentCommentPrefixSlash = '\n/// ';
+const markDownCodeInDocumentComment = `${documentCommentPrefixSlash}\`\`\``;
+const dartCodeRegExp = RegExp(`(?<=${markDownCodeInDocumentComment}dart)[^\`]*(?=${markDownCodeInDocumentComment})`, 'gmi');
+
 const COPY_TO_CLIPBOARD_COMMAND = 'copyToClipboard';
 
 export class CommentaryCodeLensProvider implements CodeLensProvider {
@@ -18,9 +21,8 @@ export class CommentaryCodeLensProvider implements CodeLensProvider {
   }
 
   copyToClipboard(range: Range) {
-    let text = getRangeText(range);
+    let text = getRangeText(range)?.replace(RegExp(documentCommentPrefixSlash, 'gmi'), '\n');
     if (text) {
-      // todo: 删除///
       env.clipboard.writeText(text);
       window.showInformationMessage('😊 😊 😊已复制到剪切板📋😊 😊 😊');
     }
@@ -35,10 +37,10 @@ export class CommentaryCodeLensProvider implements CodeLensProvider {
       let range = getRange(document, match.index, match[0].length);
       codeLensList.push(
         new CodeLens(
-          range.with(range.start.translate(-1)),
+          range,
           {
-            title: 'Copy Code',
-            tooltip: 'Copy Code',
+            title: 'Copy Example Code',
+            tooltip: 'Copy Example Code',
             command: COPY_TO_CLIPBOARD_COMMAND,
             arguments: [range],
           }
