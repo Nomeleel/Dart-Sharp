@@ -35,6 +35,8 @@ export class CommentaryCodeLensProvider implements CodeLensProvider {
     dartCodeRegExp.lastIndex = -1;
     while (match = dartCodeRegExp.exec(text)) {
       let range = getRange(document, match.index, match[0].length);
+      // TODO(Nomeleel): 添加分割线 形成区域  
+      // TODO(Nomeleel): 代码特殊化显示 区别于真正的注释
       codeLensList.push(
         new CodeLens(
           range,

@@ -2,6 +2,8 @@ import { join } from "path";
 import { commands, extensions, Position, Range, TextDocument, TextEdit, TextEditor, Uri, window, workspace, WorkspaceEdit } from "vscode";
 import { EXTENSION_NAME, PUBLISHER } from "../constant/constant";
 
+// TODO(Nomeleel): 分类
+ 
 export async function openTextDocument(path: string): Promise<TextEditor> {
   let textDocument = await workspace.openTextDocument(path);
   return await window.showTextDocument(textDocument);
