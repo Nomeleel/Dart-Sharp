@@ -1,4 +1,4 @@
-import { CancellationToken, CodeLens, CodeLensProvider, commands, Disposable, env, languages, ProviderResult, Range, TextDocument, window } from "vscode";
+import { CancellationToken, CodeLens, CodeLensProvider, commands, Disposable, env, Hover, HoverProvider, languages, MarkdownString, Position, ProviderResult, Range, TextDocument, window } from "vscode";
 import { DART_MODE } from "../constant/constant";
 import { getRangeText } from "../util/document";
 import { getRange } from "../util/util";
@@ -9,19 +9,20 @@ const dartCodeRegExp = RegExp(`(?<=${markDownCodeInDocumentComment}dart)[^\`]*(?
 
 const COPY_TO_CLIPBOARD_COMMAND = 'copyToClipboard';
 
-export class CommentaryCodeLensProvider implements CodeLensProvider {
+export class CommentaryCodeLensProvider implements CodeLensProvider, HoverProvider {
 
   public disposables: Disposable[] = [];
 
   constructor() {
     this.disposables.push(
       languages.registerCodeLensProvider(DART_MODE, this),
+      languages.registerHoverProvider(DART_MODE, this),
       commands.registerCommand(COPY_TO_CLIPBOARD_COMMAND, this.copyToClipboard),
     );
   }
 
   copyToClipboard(range: Range) {
-    let text = getRangeText(range)?.replace(RegExp(documentCommentPrefixSlash, 'gmi'), '\n');
+    let text = this.getRangeCommentaryText(range);
     if (text) {
       env.clipboard.writeText(text);
       window.showInformationMessage('😊 😊 😊已复制到剪切板📋😊 😊 😊');
@@ -51,6 +52,25 @@ export class CommentaryCodeLensProvider implements CodeLensProvider {
     }
 
     return codeLensList;
+  }
+
+  provideHover(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Hover> {
+    let text = document.getText();
+    let match: RegExpExecArray | null;
+    dartCodeRegExp.lastIndex = -1;
+    while (match = dartCodeRegExp.exec(text)) {
+      let range = getRange(document, match.index, match[0].length);
+      if (range.contains(position)) {
+        let commentaryText = this.getRangeCommentaryText(range);
+        return new Hover(
+          new MarkdownString(`\`\`\`dart${commentaryText}\n\`\`\`\``)
+        );
+      }
+    }
+  }
+
+  private getRangeCommentaryText(range: Range) : string | undefined {
+    return getRangeText(range)?.replace(RegExp(documentCommentPrefixSlash, 'gmi'), '\n');
   }
 
   public dispose(): any {
