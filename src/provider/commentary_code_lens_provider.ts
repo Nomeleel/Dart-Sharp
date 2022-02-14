@@ -36,8 +36,18 @@ export class CommentaryCodeLensProvider implements CodeLensProvider, HoverProvid
     dartCodeRegExp.lastIndex = -1;
     while (match = dartCodeRegExp.exec(text)) {
       let range = getRange(document, match.index, match[0].length);
-      // TODO(Nomeleel): 添加分割线 形成区域  
+ 
       // TODO(Nomeleel): 代码特殊化显示 区别于真正的注释
+      window.activeTextEditor?.setDecorations(
+        window.createTextEditorDecorationType({
+          isWholeLine: true,
+          backgroundColor: '#171717',
+          fontStyle: 'oblique',
+          cursor: 'pointer'
+        }),
+        [new Range(range.start, range.end.translate(1))],
+      );
+
       codeLensList.push(
         new CodeLens(
           range,
@@ -69,7 +79,7 @@ export class CommentaryCodeLensProvider implements CodeLensProvider, HoverProvid
     }
   }
 
-  private getRangeCommentaryText(range: Range) : string | undefined {
+  private getRangeCommentaryText(range: Range): string | undefined {
     return getRangeText(range)?.replace(RegExp(documentCommentPrefixSlash, 'gmi'), '\n');
   }
 
