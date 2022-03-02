@@ -1,4 +1,59 @@
 {
+  "AbsorbPointer": {
+    "prefix": [
+      "absorbpointer",
+      "AbsorbPointer"
+    ],
+    "scope": "dart",
+    "body": [
+      "AbsorbPointer(",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Wrap with / Add AbsorbPointer..."
+  },
+  "Align": {
+    "prefix": [
+      "align",
+      "Align"
+    ],
+    "scope": "dart",
+    "body": [
+      "Align(",
+      "\talignment: Alignment.${1|topLeft,topCenter,topRight,centerLeft,center,centerRight|},",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Wrap with / Add Align..."
+  },
+  "ClipRRect": {
+    "prefix": [
+      "cliprrect",
+      "ClipRRect"
+    ],
+    "scope": "dart",
+    "body": [
+      "ClipRRect(",
+      "\tborderRadius: BorderRadius.circular(7.0),",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Wrap with / Add ClipRRect..."
+  },
+  "ColoredBox": {
+    "prefix": [
+      "coloredbox",
+      "ColoredBox"
+    ],
+    "scope": "dart",
+    "body": [
+      "ColoredBox(",
+      "\tcolor: const Color(0xFF123456),",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Wrap with / Add ColoredBox..."
+  },
   "Column": {
     "prefix": [
       "column",
@@ -12,7 +67,23 @@
       "\t],",
       ")"
     ],
-    "description": "Warp with / Add Column..."
+    "description": "Wrap with / Add Column..."
+  },
+  "DecoratedBox": {
+    "prefix": [
+      "decoratedbox",
+      "DecoratedBox"
+    ],
+    "scope": "dart",
+    "body": [
+      "DecoratedBox(",
+      "\tdecoration: BoxDecoration(",
+      "\t\tcolor: const Color(0xFF123456),",
+      "\t\t),",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Wrap with / Add DecoratedBox..."
   },
   "Expanded": {
     "prefix": [
@@ -25,7 +96,21 @@
       "\tchild: $0,",
       ")"
     ],
-    "description": "Warp with / Add Expanded..."
+    "description": "Wrap with / Add Expanded..."
+  },
+  "FittedBox": {
+    "prefix": [
+      "fittedbox",
+      "FittedBox"
+    ],
+    "scope": "dart",
+    "body": [
+      "FittedBox(",
+      "\talignment: Alignment.${1|topLeft,topCenter,topRight,centerLeft,center,centerRight|},",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Wrap with / Add FittedBox..."
   },
   "Flex": {
     "prefix": [
@@ -40,7 +125,7 @@
       "\t],",
       ")"
     ],
-    "description": "Warp with / Add Flex..."
+    "description": "Wrap with / Add Flex..."
   },
   "Flexible": {
     "prefix": [
@@ -53,7 +138,7 @@
       "\tchild: $0,",
       ")"
     ],
-    "description": "Warp with / Add Flexible..."
+    "description": "Wrap with / Add Flexible..."
   },
   "GestureDetector": {
     "prefix": [
@@ -67,7 +152,20 @@
       "\tchild: $0,",
       ")"
     ],
-    "description": "Warp with / Add GestureDetector..."
+    "description": "Wrap with / Add GestureDetector..."
+  },
+  "IgnorePointer": {
+    "prefix": [
+      "ignorepointer",
+      "IgnorePointer"
+    ],
+    "scope": "dart",
+    "body": [
+      "IgnorePointer(",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Wrap with / Add IgnorePointer..."
   },
   "KeyedSubtree": {
     "prefix": [
@@ -81,7 +179,22 @@
       "\tchild: $0,",
       ")"
     ],
-    "description": "Warp with / Add KeyedSubtree..."
+    "description": "Wrap with / Add KeyedSubtree..."
+  },
+  "LimitedBox": {
+    "prefix": [
+      "limitedbox",
+      "LimitedBox"
+    ],
+    "scope": "dart",
+    "body": [
+      "LimitedBox(",
+      "\tmaxWidth: ${1:22},",
+      "\tmaxHeight: ${2:77},",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Wrap with / Add LimitedBox..."
   },
   "Opacity": {
     "prefix": [
@@ -95,7 +208,7 @@
       "\tchild: $0,",
       ")"
     ],
-    "description": "Warp with / Add Opacity..."
+    "description": "Wrap with / Add Opacity..."
   },
   "Positioned": {
     "prefix": [
@@ -114,7 +227,21 @@
       "\tchild: $0,",
       ")"
     ],
-    "description": "Warp with / Add Positioned..."
+    "description": "Wrap with / Add Positioned..."
+  },
+  "RotatedBox": {
+    "prefix": [
+      "rotatedbox",
+      "RotatedBox"
+    ],
+    "scope": "dart",
+    "body": [
+      "RotatedBox(",
+      "\tquarterTurns: ${1:2},",
+      "\tchild: $0,",
+      ")"
+    ],
+    "description": "Wrap with / Add RotatedBox..."
   },
   "Row": {
     "prefix": [
@@ -129,7 +256,7 @@
       "\t],",
       ")"
     ],
-    "description": "Warp with / Add Row..."
+    "description": "Wrap with / Add Row..."
   },
   "SingleChildScrollView": {
     "prefix": [
@@ -142,7 +269,7 @@
       "\tchild: $0,",
       ")"
     ],
-    "description": "Warp with / Add SingleChildScrollView..."
+    "description": "Wrap with / Add SingleChildScrollView..."
   },
   "Stack": {
     "prefix": [
@@ -157,6 +284,6 @@
       "\t],",
       ")"
     ],
-    "description": "Warp with / Add Stack..."
+    "description": "Wrap with / Add Stack..."
   }
 }
