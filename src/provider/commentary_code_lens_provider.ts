@@ -22,7 +22,7 @@ export class CommentaryCodeLensProvider implements CodeLensProvider, HoverProvid
   }
 
   copyToClipboard(range: Range) {
-    let text = this.getRangeCommentaryText(range);
+    let text = getRangeCommentaryText(range);
     if (text) {
       env.clipboard.writeText(text);
       window.showInformationMessage('😊 😊 😊已复制到剪切板📋😊 😊 😊');
@@ -71,7 +71,7 @@ export class CommentaryCodeLensProvider implements CodeLensProvider, HoverProvid
     while (match = dartCodeRegExp.exec(text)) {
       let range = getRange(document, match.index, match[0].length);
       if (range.contains(position)) {
-        let commentaryText = this.getRangeCommentaryText(range);
+        let commentaryText = getRangeCommentaryText(range);
         return new Hover(
           new MarkdownString(`\`\`\`dart${commentaryText}\n\`\`\`\``)
         );
@@ -79,11 +79,11 @@ export class CommentaryCodeLensProvider implements CodeLensProvider, HoverProvid
     }
   }
 
-  private getRangeCommentaryText(range: Range): string | undefined {
-    return getRangeText(range)?.replace(RegExp(documentCommentPrefixSlash, 'gmi'), '\n');
-  }
-
   public dispose(): any {
     this.disposables.forEach((e) => e.dispose());
   }
+}
+
+export function getRangeCommentaryText(range: Range): string | undefined {
+  return getRangeText(range)?.replace(RegExp(documentCommentPrefixSlash, 'gmi'), '\n');
 }

@@ -45,3 +45,8 @@
  
   1. 符号命中跳转(关注[]中的符号)
   2. Example代码提供复制功能(提取```dart```中内容)
+  3.   /// ** See code in examples/api/lib/material/reorderable_list/reorderable_list_view.reorderable_list_view_builder.0.dart **
+
+# pubspec.lock ref upgrade
+ 
+  1. 有可能变的分支 pub get时需要更新commit hash

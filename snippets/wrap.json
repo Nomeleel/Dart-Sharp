@@ -258,6 +258,19 @@
     ],
     "description": "Wrap with / Add Row..."
   },
+  "Scaffold": {
+    "prefix": [
+      "scaffold",
+      "Scaffold"
+    ],
+    "scope": "dart",
+    "body": [
+      "Scaffold(",
+      "\tbody: $0,",
+      ")"
+    ],
+    "description": "Wrap with / Add Scaffold..."
+  },
   "SingleChildScrollView": {
     "prefix": [
       "singlechildscrollview",
