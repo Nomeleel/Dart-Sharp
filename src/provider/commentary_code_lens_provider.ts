@@ -3,8 +3,8 @@ import { DART_MODE } from "../constant/constant";
 import { getRangeText } from "../util/document";
 import { getRange } from "../util/util";
 
-const documentCommentPrefixSlash = '\n/// ';
-const markDownCodeInDocumentComment = `${documentCommentPrefixSlash}\`\`\``;
+const documentCommentPrefixSlash = '\n///';
+const markDownCodeInDocumentComment = `${documentCommentPrefixSlash} \`\`\``;
 const dartCodeRegExp = RegExp(`(?<=${markDownCodeInDocumentComment}dart)[^\`]*(?=${markDownCodeInDocumentComment})`, 'gmi');
 
 const COPY_TO_CLIPBOARD_COMMAND = 'copyToClipboard';
