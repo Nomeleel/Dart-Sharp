@@ -11,7 +11,7 @@ const flutterExampleLinkRegExp = /(?<=\\*\\* See code in )\S+(?= \\*\\*)/gmi;
 
 const COPY_TO_CLIPBOARD_COMMAND = 'copyToClipboard';
 
-export class CommentaryCodeLensProvider extends RegExpProvider implements CodeLensProvider, HoverProvider {
+export class CommentaryExampleProvider extends RegExpProvider implements CodeLensProvider, HoverProvider {
 
   public disposables: Disposable[] = [];
   private flutterSdkPath: string = '';
