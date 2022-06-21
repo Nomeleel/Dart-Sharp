@@ -48,6 +48,11 @@ export async function getFillRange(uri: Uri): Promise<Range> {
   return new Range(new Position(0, 0), new Position(textDocument.lineCount + 1, 0));
 }
 
+export async function getTextDocumentContent(uri: Uri): Promise<string> {
+  let textDocument = await workspace.openTextDocument(uri);
+  return textDocument.getText();
+}
+
 export function rangesOfOne(textEditor: TextEditor, searchText: string): Range | undefined {
   const doc = textEditor.document;
   if (doc) {
