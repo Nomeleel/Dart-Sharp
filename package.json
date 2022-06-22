@@ -8,12 +8,12 @@
 		"type": "git",
 		"url": "https://github.com/Nomeleel/VS-Code-Extension-Collection/tree/master/dart%20sharp"
 	},
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"engines": {
 		"vscode": "^1.46.0"
 	},
 	"categories": [
-    "Snippets",
+		"Snippets",
 		"Programming Languages"
 	],
 	"activationEvents": [
@@ -93,7 +93,7 @@
 				}
 			]
 		},
-    "snippets": [
+		"snippets": [
 			{
 				"language": "dart",
 				"path": "./snippets/wrap.json"

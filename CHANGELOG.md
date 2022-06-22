@@ -16,3 +16,8 @@
 
 - Add common widget for wrap snippet.
 - Add dart format status display to the status bar.
+
+## [0.0.6]
+
+- Add common widget for wrap snippet.
+- Add dart example code for quick extraction and exanple code file link to jump.

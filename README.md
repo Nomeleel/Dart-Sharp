@@ -70,3 +70,13 @@ Dart extension plus，在Dart插件的基础上扩展一些稀奇古怪的功能
 ## 排水沟色块提醒增强
 
 ![color_decoration](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/color_decoration.png)
+
+## 注释中案例操作增强
+
+### 案例代码突出显示、查看、快速复制
+
+<img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/commentary_example_code.gif" width="60%"/>
+
+### 案例代码链接快速查看、导向
+
+<img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/commentary_example_link.gif" width="60%"/>
