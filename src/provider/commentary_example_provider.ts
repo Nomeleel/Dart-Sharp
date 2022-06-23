@@ -71,6 +71,10 @@ export class CommentaryExampleProvider extends RegExpProvider implements CodeLen
   }
 
   public async provideHover(document: TextDocument, position: Position, token: CancellationToken): Promise<Hover | undefined> {
+    return (await super.provideHover(document, position, token)) ?? this.provideDartCodeHover(document, position);
+  }
+  
+  public provideDartCodeHover(document: TextDocument, position: Position): Hover | undefined {
     let text = document.getText();
     let match: RegExpExecArray | null;
     dartCodeRegExp.lastIndex = -1;
@@ -81,11 +85,9 @@ export class CommentaryExampleProvider extends RegExpProvider implements CodeLen
         return this.getCodeHover(commentaryText);
       }
     }
-
-    return super.provideHover(document, position, token);
   }
 
-  public async provideHoverByRegExpWord(document: TextDocument, position: Position, word: string): Promise<Hover | undefined> {
+  public async provideHoverByRegExpWord(document: TextDocument, range: Range, word: string): Promise<Hover | undefined> {
     let exampleContent = await getTextDocumentContent(this.getExampleUri(document, word))
     return this.getCodeHover(`\n${exampleContent}`);
   }
