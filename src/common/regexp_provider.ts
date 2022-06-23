@@ -14,9 +14,9 @@ export abstract class RegExpProvider implements DocumentLinkProvider, Definition
     let links: DocumentLink[] = [];
     let text = document.getText();
     let match: RegExpExecArray | null;
-    
+
     this.regExp.lastIndex = -1;
-    while(match = this.regExp.exec(text)) {
+    while (match = this.regExp.exec(text)) {
       let range = getRange(document, match.index, match[0].length);
       let documentLink = await this.provideDocumentLinkByRegExpRange(document, range, document.getText(range));
       if (documentLink) {
@@ -32,10 +32,9 @@ export abstract class RegExpProvider implements DocumentLinkProvider, Definition
 
   // DefinitionProvider
   public async provideDefinition(document: TextDocument, position: Position, token: CancellationToken): Promise<LocationLink[] | undefined> {
-    let wordRange: Range | undefined;
-    let word = this.getWordAtPosition(document, position, this.regExp, wordRange);
-    if (word && wordRange) {
-      return this.provideLocationLinksByRegExpWord(document, wordRange, word);
+    let wordRange = document.getWordRangeAtPosition(position, this.regExp);
+    if (wordRange) {
+      return this.provideLocationLinksByRegExpWord(document, wordRange, document.getText(wordRange));
     }
   }
 
@@ -45,18 +44,18 @@ export abstract class RegExpProvider implements DocumentLinkProvider, Definition
 
   // HoverProvider
   public async provideHover(document: TextDocument, position: Position, token: CancellationToken): Promise<Hover | undefined> {
-    let word = this.getWordAtPosition(document, position);
-    if (word) {
-      return this.provideHoverByRegExpWord(document, position, word);
+    let wordRange = document.getWordRangeAtPosition(position, this.regExp);
+    if (wordRange) {
+      return this.provideHoverByRegExpWord(document, wordRange, document.getText(wordRange));
     }
   }
 
-  public async provideHoverByRegExpWord(document: TextDocument, position: Position, word: string): Promise<Hover | undefined> {
+  public async provideHoverByRegExpWord(document: TextDocument, range: Range, word: string): Promise<Hover | undefined> {
     return undefined;
   }
 
-  public getWordAtPosition(document: TextDocument, position: Position,regex = this.regExp, wordRange?: Range): string | undefined {
-    wordRange = document.getWordRangeAtPosition(position, this.regExp);
+  public getWordAtPosition(document: TextDocument, position: Position, regex = this.regExp): string | undefined {
+    let wordRange = document.getWordRangeAtPosition(position, regex);
     if (wordRange) {
       return document.getText(wordRange);
     }
