@@ -1,6 +1,7 @@
 import { CodeAction, commands, Position, Range, Selection, SnippetString, window, workspace } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
 import { WRAP_SNIPPET_COMMAND } from "../constant/constant";
+import { VSCODE_EXECUTE_CODE_ACTION_PROVIDER } from "../constant/vscode";
 import { formatEnabled, formatScope, formatSelection } from "../util/format";
 import { compensateForVsCodeIndenting } from "../util/util";
 
@@ -25,7 +26,7 @@ export class WrapSnippetCommand extends DisposableBase {
       await editor.insertSnippet(new SnippetString(insertText), targetRange);
 
       // 插入未引入的符号 尝试进行引入
-      const codeActions = await (commands.executeCommand("vscode.executeCodeActionProvider", editor.document.uri, targetRange) as Thenable<CodeAction[]>);
+      const codeActions = await (commands.executeCommand(VSCODE_EXECUTE_CODE_ACTION_PROVIDER, editor.document.uri, targetRange) as Thenable<CodeAction[]>);
       let quickfixImport = codeActions.find((e) => e.kind?.value.startsWith('quickfix.import'));
       let importOffset = 0;
       if (quickfixImport && quickfixImport.edit) {

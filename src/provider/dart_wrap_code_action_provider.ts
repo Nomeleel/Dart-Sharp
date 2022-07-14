@@ -1,11 +1,14 @@
 import * as fs from "fs";
-import { CodeAction, CodeActionKind, CodeActionProvider, Disposable, languages, Position, Selection, TextDocument, TextEditor, Uri, window, workspace } from "vscode";
+import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, commands, Disposable, languages, Position, Range, Selection, TextDocument, TextEditor, Uri, window, workspace } from "vscode";
 import { DART_MODE, WRAP_SNIPPET_COMMAND } from "../constant/constant";
+import { VSCODE_EXECUTE_CODE_ACTION_PROVIDER } from "../constant/vscode";
 import { getExtensionSnippetPath } from "../util/util";
 
 const leftBracket = '(';
 const rightBracket = ')';
 const snippetFilePath = '.vscode/wrap.code-snippets';
+
+const wrapWidgetCodeActionKind = 'refactor.flutter.wrap.generic';
 export class DatWrapCodeActionProvider implements CodeActionProvider {
 
   public disposables: Disposable[] = [];
@@ -19,11 +22,13 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
     );
   }
 
-  public async provideCodeActions(): Promise<CodeAction[]> {
+  public async provideCodeActions(document: TextDocument, range: Range | Selection, context: CodeActionContext): Promise<CodeAction[] | undefined> {
+    if (context && context?.only?.value == wrapWidgetCodeActionKind) return;
+
     const editor = window.activeTextEditor;
     if (editor) {
-      let selection = this.getWidgetSelection(editor);
-      if (selection) {
+      let widgetRange = ((await this.getWidgetRange(editor)) ?? this.tryGetTargetSelection(editor));
+      if (widgetRange) {
         if (!this.commonSnippetList) {
           this.commonSnippetList = await this.getCommonSnippetList();
         }
@@ -37,19 +42,24 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
           action.command = {
             title: snippet.name,
             command: WRAP_SNIPPET_COMMAND,
-            arguments: [selection, snippet.bodyText],
+            arguments: [widgetRange, snippet.bodyText],
           };
           return action;
         });
       }
     }
-
-    return [];
   }
 
-  private getWidgetSelection(editor: TextEditor): Selection | undefined {
+  private async getWidgetRange(editor: TextEditor): Promise<Range | undefined> {
+    let codeActions = (await commands.executeCommand(VSCODE_EXECUTE_CODE_ACTION_PROVIDER, editor.document.uri, editor.selection, wrapWidgetCodeActionKind)) as CodeAction[];
+    if (codeActions.length > 0) {
+      return codeActions[0].command?.arguments?.[2]['range'];
+    }
+  }
+
+  private tryGetTargetSelection(editor: TextEditor): Selection | undefined {
     const document = editor.document;
-    let textRange = document.getWordRangeAtPosition(editor.selection.active, /(?<=\W+)(const )?[\w\.]*\(/);
+    let textRange = document.getWordRangeAtPosition(editor.selection.active, /(?<=\W+)(const )?[\w\.,<> ]*\(/);
     if (textRange) {
       for (let lineIndex = textRange.end.line, bracketCount = 1; lineIndex < document.lineCount; lineIndex++) {
         const curTextLine = document.lineAt(lineIndex);
@@ -69,17 +79,17 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
     }
   }
 
-  private async getCommonSnippetList() : Promise<Snippet[]>{
+  private async getCommonSnippetList(): Promise<Snippet[]> {
     return (await this.getSnippetList(getExtensionSnippetPath('wrap.json'))) ?? [];
   }
 
-  private async getSnippetList(snippetFileUri? : Uri) : Promise<Snippet[] | undefined>{
+  private async getSnippetList(snippetFileUri?: Uri): Promise<Snippet[] | undefined> {
     if (!snippetFileUri) {
       let snippetFile = await workspace.findFiles(snippetFilePath);
       if (snippetFile.length == 0) return;
       snippetFileUri = snippetFile[0];
     }
-    
+
     try {
       let snippetContent = fs.readFileSync(snippetFileUri.path, 'utf-8');
       let snippetMap = new Map(Object.entries<Snippet>(JSON.parse(snippetContent)));
@@ -93,7 +103,7 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
     }
   }
 
-  private async listenCustomSnippetFile(textDocument: TextDocument) : Promise<any> {
+  private async listenCustomSnippetFile(textDocument: TextDocument): Promise<void> {
     if (textDocument.uri.path.endsWith(snippetFilePath)) {
       let snippetList = await this.getSnippetList(textDocument.uri);
       if (snippetList) {
@@ -108,17 +118,17 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
 }
 
 class Snippet {
-	public name: string;
-	public body: string | string[];
+  public name: string;
+  public body: string | string[];
   public get bodyText() {
     if (this.body instanceof Array) {
       return this.body.join('\n');
     }
     return this.body.toString();
-}
+  }
 
-	constructor(name: string, body: string | string[]) {
-		this.name = name;
-		this.body = body;
-	}
+  constructor(name: string, body: string | string[]) {
+    this.name = name;
+    this.body = body;
+  }
 }
