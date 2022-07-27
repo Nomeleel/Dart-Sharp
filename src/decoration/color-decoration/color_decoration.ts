@@ -4,35 +4,38 @@ This code is in reference: https://github.com/Dart-Code/Dart-Code/blob/master/sr
 
 import * as fs from "fs";
 import * as path from "path";
-import * as vs from "vscode";
+import { CancellationToken, Color, ColorInformation, ColorPresentation, Disposable, DocumentColorProvider, languages, ProviderResult, Range, TextDocument, TextEdit, TextEditor, TextEditorDecorationType, Uri, window, workspace } from "vscode";
+import { DART_MODE } from "../../constant/constant";
 import { ColorDecorationConfig } from "./color_decoration_config";
 import { ColorRangeComputer } from "./color_range_computer";
 import { isAnalyzable, mkDirRecursive } from "./util";
 
-export class ColorDecoration implements vs.Disposable {
-	private readonly subscriptions: vs.Disposable[] = [];
+export class ColorDecoration implements Disposable, DocumentColorProvider {
+	private readonly subscriptions: Disposable[] = [];
 	private readonly computer: ColorRangeComputer;
-	private activeEditor?: vs.TextEditor;
+	private activeEditor?: TextEditor;
 	private updateTimeout?: NodeJS.Timeout;
-	private readonly decorationTypes: { [key: string]: vs.TextEditorDecorationType } = {};
+	private readonly decorationTypes: { [key: string]: TextEditorDecorationType } = {};
 
 	constructor(private readonly imageStoragePath: string, private readonly config: ColorDecorationConfig) {
 		this.computer = new ColorRangeComputer(config.colorRangeComputerProvider);
-		this.subscriptions.push(vs.workspace.onDidChangeTextDocument((e) => {
+		this.subscriptions.push(workspace.onDidChangeTextDocument((e) => {
 			if (this.activeEditor && e.document === this.activeEditor.document) {
 				// Delay this so if we're getting lots of updates we don't flicker.
 				if (this.updateTimeout) { clearTimeout(this.updateTimeout); }
 				this.updateTimeout = setTimeout(() => this.update(), 1000);
 			}
 		}));
-		this.subscriptions.push(vs.window.onDidChangeActiveTextEditor((e) => {
+		this.subscriptions.push(window.onDidChangeActiveTextEditor((e) => {
 			this.setTrackingFile(e);
 			this.update();
 		}));
-		if (vs.window.activeTextEditor) {
-			this.setTrackingFile(vs.window.activeTextEditor);
+		if (window.activeTextEditor) {
+			this.setTrackingFile(window.activeTextEditor);
 			this.update();
 		}
+
+		languages.registerColorProvider(DART_MODE, this);
 	}
 
 	private update() {
@@ -45,8 +48,8 @@ export class ColorDecoration implements vs.Disposable {
 		for (const colorHex of Object.keys(results)) {
 			const filePath = this.createImageFile(colorHex);
 			if (filePath && !this.decorationTypes[colorHex]) {
-				this.decorationTypes[colorHex] = vs.window.createTextEditorDecorationType({
-					gutterIconPath: vs.Uri.file(filePath),
+				this.decorationTypes[colorHex] = window.createTextEditorDecorationType({
+					gutterIconPath: Uri.file(filePath),
 					gutterIconSize: "50%",
 				});
 			}
@@ -60,7 +63,7 @@ export class ColorDecoration implements vs.Disposable {
 		}
 	}
 
-	private setTrackingFile(editor: vs.TextEditor | undefined) {
+	private setTrackingFile(editor: TextEditor | undefined) {
 		if (editor && isAnalyzable(editor.document, this.config.analyzableLanguages, this.config.analyzableFileExtensions)) {
 			this.activeEditor = editor;
 		} else { this.activeEditor = undefined; }
@@ -85,6 +88,33 @@ export class ColorDecoration implements vs.Disposable {
 		} catch (e) {
 			// log
 		}
+	}
+
+	public provideDocumentColors(document: TextDocument, token: CancellationToken): ProviderResult<ColorInformation[]> {
+		const results = this.computer.compute(document);
+
+		let colorInfos: ColorInformation[] = [];
+		for (const colorHex of Object.keys(results)) {
+			const color = this.parseColor(colorHex);
+			results[colorHex].forEach((range) => {
+				let reRange = document.getWordRangeAtPosition(range.start);
+				colorInfos.push(new ColorInformation(reRange ?? range, color));
+			});
+		}
+
+		return colorInfos;
+	}
+
+	public provideColorPresentations(color: Color, context: { document: TextDocument; range: Range; }, token: CancellationToken): ProviderResult<ColorPresentation[]> {
+    let colorPresentation = new ColorPresentation(context.document.getText(context.range));
+    // TODO(Nomeleel): Imp
+    colorPresentation.textEdit = TextEdit.replace(context.range, '');
+		return [colorPresentation];
+	}
+
+	private parseColor(colorHex: string): Color {
+		let parse = (index: number) => parseInt(colorHex.substring(index * 2, index * 2 + 2), 16) / 255;
+		return new Color(parse(1), parse(2), parse(3), parse(0));
 	}
 
 	public dispose() {
