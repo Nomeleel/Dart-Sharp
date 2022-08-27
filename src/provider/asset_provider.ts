@@ -96,7 +96,7 @@ export class AssetProvider extends RegExpProvider implements DefinitionProvider,
     let searchDir = pathDir ? `${matchAll}${pathDir}${matchAll}` : matchAll;
     let searchPath = `${searchDir}${pathText.substring(splitIndex)}`;
     // TODO(Nomeleel): 应该只对项目资源文件夹内进行搜索 排除build产物中的资源文件
-    return workspace.findFiles(searchPath, 'build');
+    return workspace.findFiles(searchPath, '**/build/**');
   }
 
   public dispose() {
