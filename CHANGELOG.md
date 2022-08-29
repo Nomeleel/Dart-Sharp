@@ -21,3 +21,8 @@
 
 - Add common widget for wrap snippet.
 - Add dart example code for quick extraction and exanple code file link to jump.
+
+## [0.0.7]
+
+- Optimized wrap snippet.
+- Optimized assets find provider.
