@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { NewDartFileCommand } from './command/new_dart_file_command';
 import { JumpToEditorCommand } from './command/jump_to_editor_command';
 import { ToggleFormatCommand } from './command/toggle_format_command';
 import { WrapSnippetCommand } from './command/wrap_snippet_command';
@@ -15,6 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(new ToggleFormatCommand());
   context.subscriptions.push(new WrapSnippetCommand());
   context.subscriptions.push(new JumpToEditorCommand());
+  context.subscriptions.push(new NewDartFileCommand());
 
   /// Provider
   context.subscriptions.push(new DatWrapCodeActionProvider());

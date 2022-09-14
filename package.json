@@ -56,6 +56,11 @@
 				"title": "Cancel Pub Action",
 				"category": "Pub",
 				"icon": "./resource/icon/cancel.png"
+			},
+			{
+				"command": "dart_sharp.newDartFile",
+				"title": "New Dart File",
+        "icon": "./resource/icon/dart.png"
 			}
 		],
 		"keybindings": [
@@ -63,6 +68,10 @@
 				"command": "dart_sharp.toggleFormat",
 				"key": "ctrl+tab",
 				"when": "editorLangId == dart"
+			},
+      {
+				"command": "dart_sharp.newDartFile",
+				"key": "ctrl+shift+d"
 			}
 		],
 		"views": {
@@ -75,6 +84,27 @@
 			]
 		},
 		"menus": {
+      "explorer/context": [
+        {
+          "command": "dart_sharp.newDartFile",
+          "group": "1_explorer_context_group",
+          "when": "explorerResourceIsFolder"
+        }
+      ],
+      "editor/context": [
+				{
+					"command": "dart_sharp.newDartFile",
+					"group": "1_editor_context_group",
+					"when": "resourceLangId == dart && resourceScheme == file"
+				}
+			],
+      "editor/title": [
+        {
+					"command": "dart_sharp.newDartFile",
+					"group": "1_editor_title_group",
+          "when": "resourceLangId == dart && resourceScheme == file"
+				}
+      ],
 			"view/title": [
 				{
 					"command": "dart_sharp.pub.get",

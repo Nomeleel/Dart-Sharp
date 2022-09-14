@@ -11,3 +11,4 @@ export const DART_ENABLE_SDK_FORMATTER = 'dart.enableSdkFormatter';
 export const JUMP_TO_EDITOR_COMMAND = `${NAME_SPEACE}.jumpToEditor`;
 export const TOGGLE_FORMAT_COMMAND = `${NAME_SPEACE}.toggleFormat`;
 export const WRAP_SNIPPET_COMMAND = `${NAME_SPEACE}.wrapSnippet`;
+export const ADD_DART_FILE_COMMAND = `${NAME_SPEACE}.newDartFile`;
