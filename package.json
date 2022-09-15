@@ -95,14 +95,14 @@
 				{
 					"command": "dart_sharp.newDartFile",
 					"group": "1_editor_context_group",
-					"when": "resourceLangId == dart && resourceScheme == file"
+					"when": "resourceScheme == file"
 				}
 			],
       "editor/title": [
         {
 					"command": "dart_sharp.newDartFile",
 					"group": "1_editor_title_group",
-          "when": "resourceLangId == dart && resourceScheme == file"
+          "when": "resourceScheme == file"
 				}
       ],
 			"view/title": [

@@ -1,4 +1,4 @@
-import { existsSync, writeFileSync } from "fs";
+import { existsSync, statSync, writeFileSync } from "fs";
 import { commands, InputBoxOptions, Uri, window, workspace } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
 import { ADD_DART_FILE_COMMAND } from "../constant/constant";
@@ -14,9 +14,10 @@ export class NewDartFileCommand extends DisposableBase {
   }
 
   static async newDartFile(uri: Uri) {
-    let dir = uri ?? currentFileDir();
+    let dir = currentFileDir(uri);
     if (dir) {
-      let fileName = await inputDartFileName();
+      let fileName = window.activeTextEditor?.document.getText(window.activeTextEditor?.selection);
+      if (!fileName) fileName = await inputDartFileName();
       if (fileName) {
         let filePath = Uri.joinPath(dir, `${snakeCase(fileName)}.dart`).fsPath;
         if (!existsSync(filePath)) {
@@ -32,9 +33,11 @@ export class NewDartFileCommand extends DisposableBase {
   }
 }
 
-function currentFileDir(): Uri | undefined {
-  let active = window.activeTextEditor?.document?.uri;
-  return active ? Uri.joinPath(active, '../') : workspace.workspaceFolders?.[0].uri;
+function currentFileDir(uri: Uri): Uri | undefined {
+  if (uri) {
+    if (statSync(uri.fsPath).isFile()) uri = Uri.joinPath(uri, '../');
+    return uri;
+  } else return workspace.workspaceFolders?.[0].uri;
 }
 
 function inputDartFileName(): Thenable<string | undefined> {
