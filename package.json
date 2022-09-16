@@ -60,7 +60,7 @@
 			{
 				"command": "dart_sharp.newDartFile",
 				"title": "New Dart File",
-        "icon": "./resource/icon/dart.png"
+        "icon": "./resource/icon/dart.svg"
 			}
 		],
 		"keybindings": [
