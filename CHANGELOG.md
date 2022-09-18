@@ -26,3 +26,7 @@
 
 - Optimized wrap snippet.
 - Optimized assets find provider.
+
+## [0.0.8]
+
+- Add new dart file command.
