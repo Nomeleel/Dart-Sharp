@@ -9,6 +9,7 @@ import { CommentaryExampleProvider } from './provider/commentary_example_provide
 import { DatWrapCodeActionProvider } from './provider/dart_wrap_code_action_provider';
 import { PubspecViewProvider } from './provider/pubspec_view_provider';
 import { FormatStatusBar } from './statusbar/format_status_bar';
+import { DartCodingStyleCompletionItemProvider } from './provider/dart_coding_style_completion_item_provider';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -23,6 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(new AssetProvider());
   context.subscriptions.push(new PubspecViewProvider());
   context.subscriptions.push(new CommentaryExampleProvider());
+  context.subscriptions.push(new DartCodingStyleCompletionItemProvider());
 
   /// Decoration
   context.subscriptions.push(new DartColorDecoration());
