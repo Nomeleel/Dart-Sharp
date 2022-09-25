@@ -10,6 +10,7 @@ import { DatWrapCodeActionProvider } from './provider/dart_wrap_code_action_prov
 import { PubspecViewProvider } from './provider/pubspec_view_provider';
 import { FormatStatusBar } from './statusbar/format_status_bar';
 import { DartCodingStyleCompletionItemProvider } from './provider/dart_coding_style_completion_item_provider';
+import { SearchSymbolCommand } from './command/search_symbol_command';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -18,6 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(new WrapSnippetCommand());
   context.subscriptions.push(new JumpToEditorCommand());
   context.subscriptions.push(new NewDartFileCommand());
+  context.subscriptions.push(new SearchSymbolCommand());
 
   /// Provider
   context.subscriptions.push(new DatWrapCodeActionProvider());

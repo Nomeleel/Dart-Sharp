@@ -17,7 +17,7 @@ export class SearchSymbolCommand extends DisposableBase {
     if (input) {
       const symbolList = await window.withProgress({
         location: ProgressLocation.Notification,
-        title: 'Search Symbol',
+        title: `Search Symbol for ${input}`,
         cancellable: true,
       }, () => commands.executeCommand<Array<SymbolInformation>>(VSCODE_EXECUTE_WORKSPACE_SYMBOL_PROVIDER, input));
 
@@ -27,16 +27,38 @@ export class SearchSymbolCommand extends DisposableBase {
         if (symbol) {
           symbolLocation = symbol.location;
         } else {
-          let selected = await window.showQuickPick(symbolList.map((symbol) => ({
+          let items = symbolList.map((symbol) => ({
             label: symbol.name,
             description: symbol.containerName,
             detail: symbol.location.uri.path,
-            location: symbol.location,
-          })));
+            location: symbol.location
+          })).sort((a, b) => {
+            let aIncludes = a.label.includes(input!);
+            let bIncludes = b.label.includes(input!);
+
+            if (aIncludes && bIncludes) return a.label.length > b.label.length ? 1 : -1;
+            if (aIncludes || bIncludes) return bIncludes ? 1 : -1;
+
+            return b.label.localeCompare(a.label);
+          });
+
+          let selected = await window.showQuickPick(
+            items,
+            {
+              title: input,
+              matchOnDescription: true,
+              matchOnDetail: true,
+              placeHolder: `Continue to search ${input} in result list`,
+            }
+          );
+
           if (selected) symbolLocation = selected.location
         }
 
-        if (symbolLocation) commands.executeCommand(JUMP_TO_EDITOR_COMMAND, symbolLocation.uri.path, symbolLocation.range); // TODO: range 不大的话 selected
+        if (symbolLocation) {
+          let selectionRange = symbolLocation.range.isSingleLine ? symbolLocation.range : null;
+          commands.executeCommand(JUMP_TO_EDITOR_COMMAND, symbolLocation.uri.path, symbolLocation.range, selectionRange);
+        }
       }
     }
   }

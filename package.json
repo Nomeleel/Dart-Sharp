@@ -61,6 +61,10 @@
 				"command": "dart_sharp.newDartFile",
 				"title": "New Dart File",
         "icon": "./resource/icon/dart.svg"
+			},
+      {
+				"command": "dart_sharp.searchSymbol",
+				"title": "Search Symbol"
 			}
 		],
 		"keybindings": [
