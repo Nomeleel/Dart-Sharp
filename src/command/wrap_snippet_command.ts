@@ -26,8 +26,8 @@ export class WrapSnippetCommand extends DisposableBase {
       await editor.insertSnippet(new SnippetString(insertText), targetRange);
 
       // 插入未引入的符号 尝试进行引入
-      const codeActions = await (commands.executeCommand(VSCODE_EXECUTE_CODE_ACTION_PROVIDER, editor.document.uri, targetRange) as Thenable<CodeAction[]>);
-      let quickfixImport = codeActions.find((e) => e.kind?.value.startsWith('quickfix.import'));
+      const codeActions = await commands.executeCommand<Array<CodeAction>>(VSCODE_EXECUTE_CODE_ACTION_PROVIDER, editor.document.uri, targetRange);
+      let quickfixImport = codeActions?.find((e) => e.kind?.value.startsWith('quickfix.import'));
       let importOffset = 0;
       if (quickfixImport && quickfixImport.edit) {
         if (await workspace.applyEdit(quickfixImport.edit))

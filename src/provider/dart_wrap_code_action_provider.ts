@@ -51,8 +51,8 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
   }
 
   private async getWidgetRange(editor: TextEditor): Promise<Range | undefined> {
-    let codeActions = (await commands.executeCommand(VSCODE_EXECUTE_CODE_ACTION_PROVIDER, editor.document.uri, editor.selection, wrapWidgetCodeActionKind)) as CodeAction[];
-    if (codeActions.length > 0) {
+    let codeActions = await commands.executeCommand<Array<CodeAction>>(VSCODE_EXECUTE_CODE_ACTION_PROVIDER, editor.document.uri, editor.selection, wrapWidgetCodeActionKind);
+    if (codeActions && codeActions.length > 0) {
       return codeActions[0].command?.arguments?.[2]['range'];
     }
   }

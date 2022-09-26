@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { join } from "path";
 import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, commands, Disposable, languages, Position, Range, Selection, SymbolInformation, TextDocument, Uri, workspace, WorkspaceEdit } from "vscode";
 import { DART_MODE } from "../constant/constant";
-import { VSCODE_EXECUTE_CODE_ACTION_PROVIDER } from "../constant/vscode";
+import { VSCODE_EXECUTE_CODE_ACTION_PROVIDER, VSCODE_EXECUTE_WORKSPACE_SYMBOL_PROVIDER } from "../constant/vscode";
 
 const quickImportImportCodeActionKind = 'quickfix.import';
 export class QuickFixImportProvider implements CodeActionProvider {
@@ -23,11 +23,11 @@ export class QuickFixImportProvider implements CodeActionProvider {
     if (range.start) {
       let position = document.getWordRangeAtPosition(range.start);
       let word = document.getText(position);
-      let result = (await commands.executeCommand('vscode.executeWorkspaceSymbolProvider', word)) as SymbolInformation[];
+      let result = await commands.executeCommand<Array<SymbolInformation>>(VSCODE_EXECUTE_WORKSPACE_SYMBOL_PROVIDER, word);
       if (result && result.length > 0) {
         let symbol = result.find((s) => s.name == word);
         if (!symbol) return;
-        let imports = (await commands.executeCommand(VSCODE_EXECUTE_CODE_ACTION_PROVIDER, document.uri, position,)) as CodeAction[];
+        let imports = await commands.executeCommand<Array<CodeAction>>(VSCODE_EXECUTE_CODE_ACTION_PROVIDER, document.uri, position);
         if (!imports || imports.length == 0) {
           if (!this.packages) {
             this.collectPackages();

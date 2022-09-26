@@ -30,3 +30,4 @@
 ## [0.0.8]
 
 - Add new dart file command.
+- Add search symbol command.
