@@ -1,0 +1,69 @@
+{
+    "TextStyle": {
+        "prefix": [
+            "textstyle",
+            "style",
+        ],
+        "scope": "dart",
+        "body": [
+            "TextStyle(",
+            "\tcolor: Colors.black,",
+            "\tfontSize: 12.0,",
+            "\tfontWeight: FontWeight.w400,",
+            ")",
+        ],
+        "description": "Add TextStyle..."
+    },
+    "SizedBox.shrink": {
+        "prefix": [
+            "sizedboxshrink",
+            "shrink"
+        ],
+        "scope": "dart",
+        "body": "SizedBox.shrink();",
+        "description": "Add SizedBox.shrink..."
+    },
+    "Color": {
+        "prefix": [
+            "color"
+        ],
+        "scope": "dart",
+        "body": "const Color(0xFF${1:FFFFFF})",
+        "description": "Add Color..."
+    },
+    "BoxDecoration": {
+        "prefix": [
+            "decoration", "boxdecoration"
+        ],
+        "scope": "dart",
+        "body": [
+            "BoxDecoration(",
+            "\tcolor: Colors.white,",
+            "\tborder: Border.all(color: Colors.grey),",
+            "\tborderRadius: BorderRadius.circular(7),",
+            "\timage: DecorationImage(",
+            "\t\timage: AssetImage(''),",
+            "\t\tfit: BoxFit.cover,",
+            "\t)",
+            ")",
+        ],
+        "description": "Add BoxDecoration..."
+    },
+    "ShapeDecoration": {
+        "prefix": [
+            "shapedecoration"
+        ],
+        "scope": "dart",
+        "body": [
+            "ShapeDecoration(",
+            "\tshape: const StadiumBorder(side: BorderSide(color: Colors.grey)),",
+            "\tcolor: Colors.white,",
+            "\timage: DecorationImage(",
+            "\t\timage: AssetImage(''),",
+            "\t\tfit: BoxFit.cover,",
+            "\t)",
+            ")",
+        ],
+        "description": "Add ShapeDecoration..."
+    },
+}
