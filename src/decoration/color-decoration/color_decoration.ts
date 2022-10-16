@@ -41,7 +41,7 @@ export class ColorDecoration implements Disposable, DocumentColorProvider {
 	private update() {
 		if (!this.activeEditor) { return; }
 
-		const results = this.computer.compute(this.activeEditor.document);
+		const results = this.colorCompute(this.activeEditor.document);
 
 		// Each color needs to be its own decoration, so here we update our main list
 		// with any new ones we hadn't previously created.
@@ -91,7 +91,7 @@ export class ColorDecoration implements Disposable, DocumentColorProvider {
 	}
 
 	public provideDocumentColors(document: TextDocument, token: CancellationToken): ProviderResult<ColorInformation[]> {
-		const results = this.computer.compute(document);
+		const results = this.colorCompute(document);
 
 		let colorInfos: ColorInformation[] = [];
 		for (const colorHex of Object.keys(results)) {
@@ -111,6 +111,20 @@ export class ColorDecoration implements Disposable, DocumentColorProvider {
     colorPresentation.textEdit = TextEdit.replace(context.range, '');
 		return [colorPresentation];
 	}
+
+  private colorCompute(document: TextDocument): {
+    [key: string]: Range[];
+  } {
+    const results = this.computer.compute(document);
+
+    for (const colorHex of Object.keys(results)) {
+      results[colorHex] = results[colorHex].filter((range) => {
+        let line = document.lineAt(range.start);
+        return !line.text.startsWith('//', line.firstNonWhitespaceCharacterIndex);
+      });
+    }
+    return results;
+  }
 
 	private parseColor(colorHex: string): Color {
 		let parse = (index: number) => parseInt(colorHex.substring(index * 2, index * 2 + 2), 16) / 255;

@@ -7,7 +7,7 @@ export interface ColorRangeComputerProvider {
 
 export class ColorRangeComputerARGBProvider implements ColorRangeComputerProvider {
 
-  readonly colorPatterns = ['(?<argb>[A-Fa-f0-9]{8})[^A-Fa-f0-9]'];
+  readonly colorPatterns = ['(?<argb>[A-Fa-f0-9]{8})(?=[,\\)\\]\\}\\\s])'];
 
   resolve(groups: { [key: string]: string; }): string | undefined {
     if (groups.argb) { return groups.argb.toLowerCase(); }
