@@ -65,6 +65,16 @@ export function rangesOfOne(textEditor: TextEditor, searchText: string): Range |
   }
 }
 
+export async function rangeIgnoreComment(uri: Uri, range: Range): Promise<Range> {
+  let textDocument = await workspace.openTextDocument(uri);
+  for (let line = range.start.line + 1; line <= range.end.line; line++) {
+    if (!textDocument.lineAt(line).text.startsWith('///')) {
+      return range.with(new Position(line, 0));
+    }
+  }
+  return range;
+}
+
 export function getRange(document: TextDocument, offset: number, length: number): Range {
   return new Range(document.positionAt(offset), document.positionAt(offset + length));
 }

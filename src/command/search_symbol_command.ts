@@ -2,6 +2,7 @@ import { commands, InputBoxOptions, ProgressLocation, SymbolInformation, window 
 import { DisposableBase } from "../common/disposable_base";
 import { JUMP_TO_EDITOR_COMMAND, SEARCH_SYMBOL_COMMAND } from "../constant/constant";
 import { VSCODE_EXECUTE_WORKSPACE_SYMBOL_PROVIDER } from "../constant/vscode";
+import { rangeIgnoreComment } from "../util/util";
 
 export class SearchSymbolCommand extends DisposableBase {
 
@@ -56,8 +57,9 @@ export class SearchSymbolCommand extends DisposableBase {
         }
 
         if (symbolLocation) {
-          let selectionRange = symbolLocation.range.isSingleLine ? symbolLocation.range : null;
-          commands.executeCommand(JUMP_TO_EDITOR_COMMAND, symbolLocation.uri.path, symbolLocation.range, selectionRange);
+          let targetRange = await rangeIgnoreComment(symbolLocation.uri, symbolLocation.range);
+          let selectionRange = targetRange.isSingleLine ? targetRange : null;
+          commands.executeCommand(JUMP_TO_EDITOR_COMMAND, symbolLocation.uri.path, targetRange, selectionRange);
         }
       }
     }
