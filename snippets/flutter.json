@@ -34,7 +34,7 @@
       "\t),",
       ")"
     ],
-    "description": "Add TextStyle..."
+    "description": "Add RichText..."
   },
   "SizedBox.shrink": {
     "prefix": [
