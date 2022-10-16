@@ -106,9 +106,9 @@ export class ColorDecoration implements Disposable, DocumentColorProvider {
 	}
 
 	public provideColorPresentations(color: Color, context: { document: TextDocument; range: Range; }, token: CancellationToken): ProviderResult<ColorPresentation[]> {
-    let colorPresentation = new ColorPresentation(context.document.getText(context.range));
-    // TODO(Nomeleel): Imp
-    colorPresentation.textEdit = TextEdit.replace(context.range, '');
+		let colorPresentation = new ColorPresentation(context.document.getText(context.range));
+		// TODO(Nomeleel): Imp
+		colorPresentation.textEdit = TextEdit.replace(context.range, '');
 		return [colorPresentation];
 	}
 
