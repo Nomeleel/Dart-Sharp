@@ -54,6 +54,10 @@ Dart extension plus，在Dart插件的基础上扩展一些稀奇古怪的功能
 
 ![wrap_common_snippet](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/wrap_common_snippet.png)
 
+### 内置常用的Flutter Snippet
+
+TextStyle、RichText、SizedBox.shrink、Color、BoxDecoration、ShapeDecoration...
+
 ## Pubspec视图
 
 ### pubspec文件导航
@@ -80,3 +84,15 @@ Dart extension plus，在Dart插件的基础上扩展一些稀奇古怪的功能
 ### 案例代码链接快速查看、导向
 
 <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/commentary_example_link.gif" width="60%"/>
+
+## 快速新建Dart文件
+
+快捷键: ***ctrl+shift+d***
+
+<div><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/new_dart_file_key.gif" width="50%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/new_dart_file_editor_menu.gif" width="50%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/new_dart_file_content_menu.gif" width="50%"/></div>
+
+## 符号定义快速查询
+
+快捷键: ***ctrl+shift+s***
+
+<img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/search_symbol.gif" width="60%"/>

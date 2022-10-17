@@ -31,3 +31,9 @@
 
 - Add new dart file command.
 - Add search symbol command.
+
+## [0.0.9]
+
+- Add flutter snippets.
+- Optimized search symbol command.
+- Optimized color decoration.
