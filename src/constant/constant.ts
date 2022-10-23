@@ -13,3 +13,4 @@ export const TOGGLE_FORMAT_COMMAND = `${NAME_SPEACE}.toggleFormat`;
 export const WRAP_SNIPPET_COMMAND = `${NAME_SPEACE}.wrapSnippet`;
 export const ADD_DART_FILE_COMMAND = `${NAME_SPEACE}.newDartFile`;
 export const SEARCH_SYMBOL_COMMAND = `${NAME_SPEACE}.searchSymbol`;
+export const SYMBOL_RELATION_COMMAND = `${NAME_SPEACE}.symbolRelation`;
