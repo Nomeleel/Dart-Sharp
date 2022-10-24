@@ -1,8 +1,8 @@
-import { commands, DefinitionLink, Location, Position, Uri, window } from "vscode";
+import { commands, DefinitionLink, Location, Position, TreeItem, Uri, window } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
 import { SYMBOL_RELATION_COMMAND } from "../constant/constant";
 import { VSCODE_EXECUTE_REFERENCE_PROVIDER } from "../constant/vscode";
-import { getTextFromLocation, getTextFromPosition } from "../util/util";
+import { getTextFromLocationFillRange, getTextFromPosition } from "../util/util";
 
 export class SymbolRelationCommand extends DisposableBase {
 
@@ -13,20 +13,39 @@ export class SymbolRelationCommand extends DisposableBase {
     );
   }
 
-  static async searchSymbol(uri: Uri, position: Position) {
+  static async searchSymbol(uri: Uri, position: Position, symbolItem: SymbolItem) {
     let curUri = uri ?? window.activeTextEditor?.document.uri;
     let curPosition = position ?? window.activeTextEditor?.selection.start;
-    console.log(await getTextFromPosition(curUri, curPosition));
     let locations = await commands.executeCommand<Array<Location>>(VSCODE_EXECUTE_REFERENCE_PROVIDER, curUri, curPosition);
-    console.log(locations);
+    let symbol = await getTextFromPosition(curUri, curPosition);
+    symbolItem ??= new SymbolItem(symbol, uri);
     if (locations) {
-      let extend = locations.find(async (location) => {
-        let text = await getTextFromLocation(location);
-        console.log(text);
-        return text.includes('extends');
-      });
-
-      console.log(extend);
+      for await (const location of locations) {
+        console.log(location);
+        let rangeText = await getTextFromLocationFillRange(location);
+        // TODO: (?<symbol>.*)
+        let extendRegExp = new RegExp(`(?<=((abstract )?class ))(?<symbol>.*)(?= extends ${symbol})`, 'gmi');
+        let match = extendRegExp.exec(rangeText);
+        if (match) {
+          let curSymbolItem = new SymbolItem(match.groups!['symbol'], location.uri, symbolItem);
+          await this.searchSymbol(location.uri, new Position(location.range.start.line, location.range.start.character + match.index + 1), curSymbolItem);
+        }
+      }
     }
+  }
+}
+
+export class SymbolItem extends TreeItem {
+  public parent: SymbolItem | undefined;
+  public children: SymbolItem[] = [];
+
+  constructor(title: string, uri?: Uri, parent?: SymbolItem) {
+    super(title);
+    this.resourceUri = uri;
+    this.parent = parent;
+  }
+
+  public equal(symbolItem: SymbolItem): boolean {
+    return this.label === symbolItem.label && this.resourceUri === symbolItem.resourceUri;
   }
 }

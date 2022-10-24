@@ -1,5 +1,5 @@
 import { join } from "path";
-import { commands, extensions, Position, Range, TextDocument, TextEdit, TextEditor, Uri, window, workspace, WorkspaceEdit } from "vscode";
+import { commands, extensions, Location, Position, Range, TextDocument, TextEdit, TextEditor, Uri, window, workspace, WorkspaceEdit } from "vscode";
 import { EXTENSION_NAME, PUBLISHER } from "../constant/constant";
 
 // TODO(Nomeleel): 分类
@@ -51,6 +51,21 @@ export async function getFillRange(uri: Uri): Promise<Range> {
 export async function getTextDocumentContent(uri: Uri): Promise<string> {
   let textDocument = await workspace.openTextDocument(uri);
   return textDocument.getText();
+}
+
+export async function getTextFromPosition(uri: Uri, position: Position): Promise<string> {
+  let textDocument = await workspace.openTextDocument(uri);
+  return textDocument.getText(textDocument.getWordRangeAtPosition(position));
+}
+
+export async function getTextFromLocation(location: Location): Promise<string> {
+  let textDocument = await workspace.openTextDocument(location.uri);
+  return textDocument.getText(location.range);
+}
+
+export async function getTextFromLocationFillRange(location: Location): Promise<string> {
+  let textDocument = await workspace.openTextDocument(location.uri);
+  return textDocument.getText(new Range(new Position(location.range.start.line, 0), textDocument.positionAt(textDocument.offsetAt(new Position(location.range.end.line + 1 , 0)) - 1)));
 }
 
 export function rangesOfOne(textEditor: TextEditor, searchText: string): Range | undefined {
