@@ -9,30 +9,31 @@ export class SymbolRelationCommand extends DisposableBase {
   constructor() {
     super();
     this.disposables.push(
-      commands.registerCommand(SYMBOL_RELATION_COMMAND, SymbolRelationCommand.searchSymbol, this),
+      commands.registerCommand(SYMBOL_RELATION_COMMAND, symbolRelationScan, this),
     );
   }
+}
 
-  static async searchSymbol(uri: Uri, position: Position, symbolItem: SymbolItem) {
-    let curUri = uri ?? window.activeTextEditor?.document.uri;
-    let curPosition = position ?? window.activeTextEditor?.selection.start;
-    let locations = await commands.executeCommand<Array<Location>>(VSCODE_EXECUTE_REFERENCE_PROVIDER, curUri, curPosition);
-    let symbol = await getTextFromPosition(curUri, curPosition);
-    symbolItem ??= new SymbolItem(symbol, uri);
-    if (locations) {
-      for await (const location of locations) {
-        console.log(location);
-        let rangeText = await getTextFromLocationFillRange(location);
-        // TODO: (?<symbol>.*)
-        let extendRegExp = new RegExp(`(?<=((abstract )?class ))(?<symbol>.*)(?= extends ${symbol})`, 'gmi');
-        let match = extendRegExp.exec(rangeText);
-        if (match) {
-          let curSymbolItem = new SymbolItem(match.groups!['symbol'], location.uri, symbolItem);
-          await this.searchSymbol(location.uri, new Position(location.range.start.line, location.range.start.character + match.index + 1), curSymbolItem);
-        }
+async function symbolRelationScan(uri?: Uri, position?: Position, symbolItem?: SymbolItem): Promise<SymbolItem | undefined> {
+  let curUri = uri ?? window.activeTextEditor?.document.uri;
+  let curPosition = position ?? window.activeTextEditor?.selection.start;
+  if (!curUri || !curPosition) return;
+  let locations = await commands.executeCommand<Array<Location>>(VSCODE_EXECUTE_REFERENCE_PROVIDER, curUri, curPosition);
+  let symbol = await getTextFromPosition(curUri, curPosition);
+  if (symbolItem == null) symbolItem = new SymbolItem(symbol, uri);
+  if (locations) {
+    for await (const location of locations) {
+      let rangeText = await getTextFromLocationFillRange(location);
+      let extendRegExp = new RegExp(`(?<=((abstract )?class ))(?<symbol>\\\w*).*(?= extends ${symbol})`, 'gmi');
+      let match = extendRegExp.exec(rangeText);
+      if (match) {
+        let curSymbolItem = new SymbolItem(match.groups!.symbol, location.uri, symbolItem);
+        symbolItem.children.push(curSymbolItem);
+        await symbolRelationScan(location.uri, new Position(location.range.start.line, match.index + 1), curSymbolItem);
       }
     }
   }
+  return symbolItem;
 }
 
 export class SymbolItem extends TreeItem {
