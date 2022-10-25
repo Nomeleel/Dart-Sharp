@@ -92,6 +92,11 @@
 					"id": "pubspec.view",
 					"name": "Pubspec",
 					"when": "dart-code:anyFlutterProjectLoaded && dart-code:showFlutterOutline"
+				},
+        {
+					"id": "symbolRelation.view",
+					"name": "Symbol Relation",
+					"when": "dart-code:anyFlutterProjectLoaded"
 				}
 			]
 		},

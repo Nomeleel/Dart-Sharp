@@ -1,16 +1,57 @@
-import { commands, DefinitionLink, Location, Position, TreeItem, Uri, window } from "vscode";
+import { CancellationToken, commands, DefinitionLink, Disposable, Event, EventEmitter, Location, Position, ProviderResult, TreeDataProvider, TreeItem, TreeItemCollapsibleState, Uri, window } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
 import { SYMBOL_RELATION_COMMAND } from "../constant/constant";
 import { VSCODE_EXECUTE_REFERENCE_PROVIDER } from "../constant/vscode";
 import { getTextFromLocationFillRange, getTextFromPosition } from "../util/util";
 
-export class SymbolRelationCommand extends DisposableBase {
+// TODO: Change to Base
+export class SymbolRelationCommand implements TreeDataProvider<SymbolItem>, Disposable {
+
+  protected disposables: Disposable[] = [];
+
+  protected rootNode: SymbolItem | undefined;
+
+  protected onDidChangeTreeDataEmitter: EventEmitter<SymbolItem | undefined | null | void> = new EventEmitter<SymbolItem | undefined | null | void>();
+  public readonly onDidChangeTreeData: Event<SymbolItem | undefined | null | void> = this.onDidChangeTreeDataEmitter.event;
 
   constructor() {
-    super();
     this.disposables.push(
-      commands.registerCommand(SYMBOL_RELATION_COMMAND, symbolRelationScan, this),
+      window.createTreeView('symbolRelation.view', { treeDataProvider: this, showCollapseAll: true }),
+      commands.registerCommand(SYMBOL_RELATION_COMMAND, this.symbolRelation, this),
     );
+  }
+
+  public async symbolRelation() {
+    let symbolItem = await symbolRelationScan();
+    if (symbolItem) {
+      this.rootNode = new SymbolItem('Symbol View');
+      this.rootNode.children.push(symbolItem);
+    } else {
+      this.rootNode = undefined;
+    }
+    this.onDidChangeTreeDataEmitter.fire();
+  }
+
+  getTreeItem(element: SymbolItem): TreeItem {
+    return element;
+  }
+
+  public getChildren(element: SymbolItem): SymbolItem[] {
+    if (element) {
+      return element.children;
+    }
+    if (this.rootNode) {
+      return this.rootNode.children;
+    }
+    return [];
+  }
+
+  public getParent(element: SymbolItem): SymbolItem | undefined {
+    return element.parent;
+  }
+
+  public dispose() {
+    this.disposables.forEach((d) => d.dispose());
   }
 }
 
@@ -44,6 +85,7 @@ export class SymbolItem extends TreeItem {
     super(title);
     this.resourceUri = uri;
     this.parent = parent;
+    this.collapsibleState = TreeItemCollapsibleState.Expanded;
   }
 
   public equal(symbolItem: SymbolItem): boolean {
