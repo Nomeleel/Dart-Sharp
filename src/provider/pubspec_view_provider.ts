@@ -107,6 +107,16 @@ export class PubspecViewProvider extends TreeDataProviderBase<PubspecItem> {
       title: "Jump To",
     };
   }
+
+  public getChildren(element?: PubspecItem): PubspecItem[] {
+    if (element) {
+      return element.children;
+    }
+    if (this.rootNode) {
+      return this.rootNode.children;
+    }
+    return [];
+  }
 }
 
 export class PubspecItem extends TreeItem {

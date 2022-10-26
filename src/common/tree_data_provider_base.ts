@@ -5,29 +5,29 @@ export class TreeDataProviderBase<T extends TreeNode> extends DisposableBase imp
 
   protected rootNode: T | undefined;
 
-  protected onDidChangeTreeDataEmitter: EventEmitter<TreeNode | undefined | null | void> = new EventEmitter<TreeNode | undefined | null | void>();
-  public readonly onDidChangeTreeData: Event<TreeNode | undefined | null | void> = this.onDidChangeTreeDataEmitter.event;
+  protected onDidChangeTreeDataEmitter: EventEmitter<T | undefined | null | void> = new EventEmitter<T | undefined | null | void>();
+  public readonly onDidChangeTreeData: Event<T | undefined | null | void> = this.onDidChangeTreeDataEmitter.event;
 
   public updateTreeView(treeNode?: T) {
     this.rootNode = treeNode;
     this.onDidChangeTreeDataEmitter.fire();
   }
 
-  getTreeItem(element: TreeNode): TreeNode {
+  public getTreeItem(element: T): TreeNode {
     return element;
   }
 
-  public getChildren(element?: TreeNode): TreeNode[] {
+  public getChildren(element?: T): TreeNode[] {
     if (element) {
       return element.children;
     }
     if (this.rootNode) {
-      return this.rootNode.children;
+      return [this.rootNode];
     }
     return [];
   }
 
-  public getParent(element: TreeNode): TreeNode | undefined {
+  public getParent(element: T): TreeNode | undefined {
     return element.parent;
   }
 }
