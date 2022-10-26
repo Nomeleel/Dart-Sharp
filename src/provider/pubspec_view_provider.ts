@@ -1,23 +1,18 @@
 import * as path from "path";
-import { Command, commands, Disposable, Event, EventEmitter, Range, TreeDataProvider, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
+import { Command, commands, Range, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
+import { TreeDataProviderBase } from "../common/tree_data_provider_base";
 import { JUMP_TO_EDITOR_COMMAND } from "../constant/constant";
 import { getExtensionIconPath, setContext } from "../util/util";
 
-export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Disposable {
-
-  protected disposables: Disposable[] = [];
-
-  protected rootNode: PubspecItem | undefined;
+export class PubspecViewProvider extends TreeDataProviderBase<PubspecItem> {
 
   // TODO remove...
   protected pubFiles: Array<Uri> | undefined;
   
   private pubCancel = false;
 
-  protected onDidChangeTreeDataEmitter: EventEmitter<PubspecItem | undefined> = new EventEmitter<PubspecItem | undefined>();
-  public readonly onDidChangeTreeData: Event<PubspecItem | undefined> = this.onDidChangeTreeDataEmitter.event;
-
   constructor() {
+    super();
     this.disposables.push(
       window.createTreeView("pubspec.view", { treeDataProvider: this, showCollapseAll: true }),
       commands.registerCommand('dart_sharp.pub.get', () => this.pubGet()),
@@ -29,10 +24,10 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
   }
 
   public async listenerPubspecFile() {
-    this.onDidChangeTreeDataEmitter.fire(undefined);
     this.pubFiles = await workspace.findFiles('**/pubspec.yaml', 'ios');
+    let rootNode;
     if (this.pubFiles.length > 0) {
-      this.rootNode = new PubspecItem('Pubspec View');
+      rootNode = new PubspecItem('Pubspec View');
       let children = this.pubFiles.map((uri) => {
         let relativePath = workspace.asRelativePath(uri);
         let dirList = path.parse(uri.path).dir.split(path.sep);
@@ -41,11 +36,9 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
         pub.setChildren([new PubspecItem(relativePath, uri, command)]);
         return pub;
       });
-      this.rootNode.setChildren(children);
-    } else {
-      this.rootNode = undefined;
+      rootNode.setChildren(children);
     }
-    this.onDidChangeTreeDataEmitter.fire(this.rootNode);
+    this.updateTreeView(rootNode);
   }
 
   public async pubGet() {
@@ -113,28 +106,6 @@ export class PubspecViewProvider implements TreeDataProvider<PubspecItem>, Dispo
       ],
       title: "Jump To",
     };
-  }
-
-  public getTreeItem(element: PubspecItem): TreeItem {
-    return element;
-  }
-
-  public getChildren(element: PubspecItem): PubspecItem[] {
-    if (element) {
-      return element.children;
-    }
-    if (this.rootNode) {
-      return this.rootNode.children;
-    }
-    return [];
-  }
-
-  public getParent(element: PubspecItem): PubspecItem | undefined {
-    return element.parent;
-  }
-
-  public dispose() {
-    this.disposables.forEach((d) => d.dispose());
   }
 }
 

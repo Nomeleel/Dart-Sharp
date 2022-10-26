@@ -4,7 +4,7 @@ import { SYMBOL_RELATION_COMMAND } from "../constant/constant";
 import { VSCODE_EXECUTE_REFERENCE_PROVIDER } from "../constant/vscode";
 import { getTextFromLocationFillRange, getTextFromPosition } from "../util/util";
 
-export class SymbolRelationProvider extends TreeDataProviderBase {
+export class SymbolRelationProvider extends TreeDataProviderBase<SymbolItem> {
 
   constructor() {
     super();
