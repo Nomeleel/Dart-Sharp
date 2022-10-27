@@ -2,7 +2,7 @@ import { existsSync, statSync, writeFileSync } from "fs";
 import { commands, InputBoxOptions, Uri, window, workspace } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
 import { ADD_DART_FILE_COMMAND } from "../constant/constant";
-import { openTextDocument } from "../util/util";
+import { openTextDocument } from "../util/document";
 
 export class NewDartFileCommand extends DisposableBase {
 

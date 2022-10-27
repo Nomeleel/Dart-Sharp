@@ -1,7 +1,8 @@
-import { commands, Position, Range, Selection, TextEditor, TextEditorRevealType, window } from "vscode";
+import { commands, Position, Range, Selection, TextEditor, TextEditorRevealType, Uri, window } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
 import { JUMP_TO_EDITOR_COMMAND } from "../constant/constant";
-import { isString, openTextDocument, rangesOfOne } from "../util/util";
+import { openTextDocument } from "../util/document";
+import { isString, rangesOfOne } from "../util/util";
 
 export class JumpToEditorCommand extends DisposableBase  {
 
@@ -12,12 +13,12 @@ export class JumpToEditorCommand extends DisposableBase  {
 		);
   }
 
-  static async jumpToEditor(editor?: TextEditor | string, target?: String | Range, selectionRange?: Range) {
+  static async jumpToEditor(editor?: TextEditor | string | Uri, target?: String | Range, selectionRange?: Range) {
     let activeEditor: TextEditor;
     if (!editor) {
       activeEditor = window.activeTextEditor!;
     } else {
-      if(typeof(editor) === 'string') {
+      if(typeof(editor) === 'string' || editor instanceof Uri) {
         activeEditor = await openTextDocument(editor);
       } else {
         activeEditor = editor;

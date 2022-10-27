@@ -1,7 +1,7 @@
 import * as path from "path";
-import { Command, commands, Range, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
+import { Command, commands, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
 import { TreeDataProviderBase } from "../common/tree_data_provider_base";
-import { JUMP_TO_EDITOR_COMMAND } from "../constant/constant";
+import { jumpToCommand } from "../util/command";
 import { getExtensionIconPath, setContext } from "../util/util";
 
 export class PubspecViewProvider extends TreeDataProviderBase<PubspecItem> {
@@ -31,7 +31,7 @@ export class PubspecViewProvider extends TreeDataProviderBase<PubspecItem> {
       let children = this.pubFiles.map((uri) => {
         let relativePath = workspace.asRelativePath(uri);
         let dirList = path.parse(uri.path).dir.split(path.sep);
-        let command = this.jumpToCommand(uri.path);
+        let command = jumpToCommand(uri);
         let pub = new PubspecItem(dirList[dirList.length - 1], uri, command);
         pub.setChildren([new PubspecItem(relativePath, uri, command)]);
         return pub;
@@ -94,18 +94,6 @@ export class PubspecViewProvider extends TreeDataProviderBase<PubspecItem> {
     this.onDidChangeTreeDataEmitter.fire(undefined);
     console.log(this.rootNode);
     this.onDidChangeTreeDataEmitter.fire(this.rootNode);
-  }
-
-  public jumpToCommand(path: string, range?: Range): Command {
-    return {
-      command: JUMP_TO_EDITOR_COMMAND,
-      arguments: [
-        path,
-        range,
-        range,
-      ],
-      title: "Jump To",
-    };
   }
 
   public getChildren(element?: PubspecItem): PubspecItem[] {

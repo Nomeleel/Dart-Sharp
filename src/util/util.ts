@@ -4,11 +4,6 @@ import { EXTENSION_NAME, PUBLISHER } from "../constant/constant";
 
 // TODO(Nomeleel): 分类
  
-export async function openTextDocument(path: string): Promise<TextEditor> {
-  let textDocument = await workspace.openTextDocument(path);
-  return await window.showTextDocument(textDocument);
-}
-
 export function activePositionText(): string | undefined {
   if (window.activeTextEditor) {
     let textEditor = window.activeTextEditor;
@@ -51,11 +46,6 @@ export async function getFillRange(uri: Uri): Promise<Range> {
 export async function getTextDocumentContent(uri: Uri): Promise<string> {
   let textDocument = await workspace.openTextDocument(uri);
   return textDocument.getText();
-}
-
-export async function getTextFromPosition(uri: Uri, position: Position): Promise<string> {
-  let textDocument = await workspace.openTextDocument(uri);
-  return textDocument.getText(textDocument.getWordRangeAtPosition(position));
 }
 
 export async function getTextFromLocation(location: Location): Promise<string> {
