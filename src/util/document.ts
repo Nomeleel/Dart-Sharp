@@ -5,9 +5,9 @@ export async function openTextDocument(path: string | Uri): Promise<TextEditor> 
   return await window.showTextDocument(textDocument);
 }
 
-export function getRangeText(range: Range, document?: TextDocument): string | undefined {
+export function getRangeText(range?: Range, document?: TextDocument): string | undefined {
   if (!document) document = window.activeTextEditor?.document;
-  return document?.getText(range);
+  return document?.getText(range ?? window.activeTextEditor?.selection);
 }
 
 export async function getTextFromPosition(uri: Uri, position: Position): Promise<string> {

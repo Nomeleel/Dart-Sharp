@@ -12,6 +12,7 @@ import { FormatStatusBar } from './statusbar/format_status_bar';
 import { DartCodingStyleCompletionItemProvider } from './provider/dart_coding_style_completion_item_provider';
 import { SearchSymbolCommand } from './command/search_symbol_command';
 import { SymbolRelationProvider } from './provider/symbol_relation_provider';
+import { CopyCommentaryCommand } from './command/copy_commentary_command';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -21,6 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(new JumpToEditorCommand());
   context.subscriptions.push(new NewDartFileCommand());
   context.subscriptions.push(new SearchSymbolCommand());
+  context.subscriptions.push(new CopyCommentaryCommand());
   
   /// Provider
   context.subscriptions.push(new DatWrapCodeActionProvider());

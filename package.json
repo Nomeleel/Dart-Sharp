@@ -69,6 +69,10 @@
       {
 				"command": "dart_sharp.symbolRelation",
 				"title": "Symbol Relation"
+			},
+      {
+				"command": "dart_sharp.copyCommentary",
+				"title": "Copy Commentary"
 			}
 		],
 		"keybindings": [
@@ -121,7 +125,12 @@
         {
 					"command": "dart_sharp.symbolRelation",
 					"group": "1_editor_context_group",
-					"when": "resourceScheme == file"
+					"when": "resourceScheme == file && editorLangId == dart"
+				},
+        {
+					"command": "dart_sharp.copyCommentary",
+					"group": "0_editor_context_group",
+					"when": "resourceScheme == file && editorLangId == dart"
 				}
 			],
       "editor/title": [

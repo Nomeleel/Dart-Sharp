@@ -1,15 +1,12 @@
-import { CancellationToken, CodeLens, CodeLensProvider, commands, Disposable, DocumentLink, env, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, ProviderResult, Range, TextDocument, Uri, window } from "vscode";
+import { CancellationToken, CodeLens, CodeLensProvider, Disposable, DocumentLink, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, ProviderResult, Range, TextDocument, Uri, window } from "vscode";
+import { documentCommentPrefixSlash, getRangeCommentaryText } from "../command/copy_commentary_command";
 import { RegExpProvider } from "../common/regexp_provider";
-import { DART_MODE } from "../constant/constant";
-import { getRangeText } from "../util/document";
+import { COPY_COMMENTARY_COMMAND, DART_MODE } from "../constant/constant";
 import { getRange, getTextDocumentContent } from "../util/util";
 
-const documentCommentPrefixSlash = '\n///';
-const markDownCodeInDocumentComment = `${documentCommentPrefixSlash} \`\`\``;
+const markDownCodeInDocumentComment = `${documentCommentPrefixSlash}\`\`\``;
 const dartCodeRegExp = RegExp(`(?<=${markDownCodeInDocumentComment}dart)[^\`]*(?=${markDownCodeInDocumentComment})`, 'gmi');
 const flutterExampleLinkRegExp = /(?<=\\*\\* See code in )\S+(?= \\*\\*)/gmi;
-
-const COPY_TO_CLIPBOARD_COMMAND = 'copyToClipboard';
 
 export class CommentaryExampleProvider extends RegExpProvider implements CodeLensProvider, HoverProvider {
 
@@ -23,16 +20,7 @@ export class CommentaryExampleProvider extends RegExpProvider implements CodeLen
       languages.registerHoverProvider(DART_MODE, this),
       languages.registerDocumentLinkProvider(DART_MODE, this),
       languages.registerDefinitionProvider(DART_MODE, this),
-      commands.registerCommand(COPY_TO_CLIPBOARD_COMMAND, this.copyToClipboard),
     );
-  }
-
-  copyToClipboard(range: Range) {
-    let text = getRangeCommentaryText(range);
-    if (text) {
-      env.clipboard.writeText(text);
-      window.showInformationMessage('😊 😊 😊已复制到剪切板📋😊 😊 😊');
-    }
   }
 
   provideCodeLenses(document: TextDocument, token: CancellationToken): ProviderResult<CodeLens[]> {
@@ -60,8 +48,8 @@ export class CommentaryExampleProvider extends RegExpProvider implements CodeLen
           {
             title: 'Copy Example Code',
             tooltip: 'Copy Example Code',
-            command: COPY_TO_CLIPBOARD_COMMAND,
-            arguments: [range],
+            command: COPY_COMMENTARY_COMMAND,
+            arguments: [document, range, false],
           }
         )
       );
@@ -81,7 +69,7 @@ export class CommentaryExampleProvider extends RegExpProvider implements CodeLen
     while (match = dartCodeRegExp.exec(text)) {
       let range = getRange(document, match.index, match[0].length);
       if (range.contains(position)) {
-        let commentaryText = getRangeCommentaryText(range);
+        let commentaryText = getRangeCommentaryText(range, false);
         return this.getCodeHover(commentaryText);
       }
     }
@@ -122,8 +110,4 @@ export class CommentaryExampleProvider extends RegExpProvider implements CodeLen
   public dispose(): any {
     this.disposables.forEach((e) => e.dispose());
   }
-}
-
-export function getRangeCommentaryText(range: Range): string | undefined {
-  return getRangeText(range)?.replace(RegExp(documentCommentPrefixSlash, 'gmi'), '\n');
 }
