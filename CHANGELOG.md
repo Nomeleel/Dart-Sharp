@@ -37,3 +37,7 @@
 - Add flutter snippets.
 - Optimized search symbol command.
 - Optimized color decoration.
+
+## [0.0.10]
+
+- Add symbol relation view.

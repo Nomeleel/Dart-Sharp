@@ -11,6 +11,7 @@ import { PubspecViewProvider } from './provider/pubspec_view_provider';
 import { FormatStatusBar } from './statusbar/format_status_bar';
 import { DartCodingStyleCompletionItemProvider } from './provider/dart_coding_style_completion_item_provider';
 import { SearchSymbolCommand } from './command/search_symbol_command';
+import { SymbolRelationProvider } from './provider/symbol_relation_provider';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -20,13 +21,14 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(new JumpToEditorCommand());
   context.subscriptions.push(new NewDartFileCommand());
   context.subscriptions.push(new SearchSymbolCommand());
-
+  
   /// Provider
   context.subscriptions.push(new DatWrapCodeActionProvider());
   context.subscriptions.push(new AssetProvider());
   context.subscriptions.push(new PubspecViewProvider());
   context.subscriptions.push(new CommentaryExampleProvider());
   context.subscriptions.push(new DartCodingStyleCompletionItemProvider());
+  context.subscriptions.push(new SymbolRelationProvider());
 
   /// Decoration
   context.subscriptions.push(new DartColorDecoration());
