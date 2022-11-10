@@ -92,6 +92,10 @@
       {
 				"command": "dart_sharp.symbolRelation",
 				"key": "ctrl+shift+r"
+			},
+      {
+				"command": "dart_sharp.copyCommentary",
+				"key": "ctrl+shift+c"
 			}
 		],
 		"views": {
