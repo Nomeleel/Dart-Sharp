@@ -75,7 +75,7 @@ TextStyle、RichText、SizedBox.shrink、Color、BoxDecoration、ShapeDecoration
 
 ![color_decoration](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/color_decoration.png)
 
-## 注释中案例操作增强
+## 注释操作增强
 
 ### 案例代码突出显示、查看、快速复制
 
@@ -84,6 +84,12 @@ TextStyle、RichText、SizedBox.shrink、Color、BoxDecoration、ShapeDecoration
 ### 案例代码链接快速查看、导向
 
 <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/commentary_example_link.gif" width="60%"/>
+
+### 注释快速复制
+
+快捷键: ***ctrl+shift+c***
+
+![copy_commentary](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/copy_commentary.gif)
 
 ## 快速新建Dart文件
 
@@ -95,4 +101,10 @@ TextStyle、RichText、SizedBox.shrink、Color、BoxDecoration、ShapeDecoration
 
 快捷键: ***ctrl+shift+s***
 
-<img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/search_symbol.gif" width="60%"/>
+<img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/search_symbol.gif" width="70%"/>
+
+## 符号关系查询
+
+快捷键: ***ctrl+shift+r***
+
+![symbol_relation](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/symbol_relation.gif)
