@@ -8,3 +8,5 @@ export const VSCODE_EXECUTE_WORKSPACE_SYMBOL_PROVIDER = 'vscode.executeWorkspace
 export const VSCODE_EXECUTE_DEFINITION_PROVIDER = 'vscode.executeDefinitionProvider';
 
 export const VSCODE_EXECUTE_REFERENCE_PROVIDER = 'vscode.executeReferenceProvider';
+
+export const VSCODE_OPEN = 'vscode.open';
