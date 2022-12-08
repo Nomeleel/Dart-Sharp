@@ -2,7 +2,7 @@ import { existsSync, statSync, writeFileSync } from "fs";
 import { commands, InputBoxOptions, Uri, window, workspace } from "vscode";
 import { DisposableBase } from "../common/disposable_base";
 import { ADD_DART_FILE_COMMAND } from "../constant/constant";
-import { openTextDocument } from "../util/document";
+import { activeSelectionText, openTextDocument } from "../util/document";
 
 export class NewDartFileCommand extends DisposableBase {
 
@@ -16,7 +16,7 @@ export class NewDartFileCommand extends DisposableBase {
   static async newDartFile(uri: Uri) {
     let dir = currentFileDir(uri);
     if (dir) {
-      let fileName = window.activeTextEditor?.document.getText(window.activeTextEditor?.selection);
+      let fileName = activeSelectionText();
       if (!fileName) fileName = await inputDartFileName();
       if (fileName) {
         let filePath = Uri.joinPath(dir, `${snakeCase(fileName)}.dart`).fsPath;

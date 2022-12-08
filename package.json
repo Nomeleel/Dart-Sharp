@@ -63,6 +63,11 @@
 				"category": "Pub"
 			},
 			{
+				"command": "dart_sharp.pub.upgrade.specific",
+				"title": "Pub Upgrade Specific",
+				"category": "Pub"
+			},
+			{
 				"command": "dart_sharp.newDartFile",
 				"title": "New Dart File",
         "icon": "./resource/icon/dart.svg"
@@ -143,6 +148,11 @@
 				},
         {
 					"command": "dart_sharp.pub.dev",
+					"group": "navigation"
+				},
+				{
+					"command": "dart_sharp.pub.upgrade.specific",
+					"when": "resourceFilename == pubspec.yaml && dart-code:anyFlutterProjectLoaded",
 					"group": "navigation"
 				}
 			],

@@ -1,7 +1,6 @@
 import * as path from "path";
 import { Command, commands, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
 import { TreeDataProviderBase } from "../common/tree_data_provider_base";
-import { VSCODE_OPEN } from "../constant/vscode";
 import { jumpToCommand } from "../util/command";
 import { getExtensionIconPath, setContext } from "../util/util";
 
@@ -19,7 +18,6 @@ export class PubspecViewProvider extends TreeDataProviderBase<PubspecItem> {
       commands.registerCommand('dart_sharp.pub.get', () => this.pubGet()),
       commands.registerCommand('dart_sharp.pub.upgrade', () => this.pubUpgrade()),
       commands.registerCommand('dart_sharp.pub.cancel', () => this.setPubCancel(false)),
-      commands.registerCommand('dart_sharp.pub.dev', () => this.openPubDev()),
     );
 
     this.listenerPubspecFile();
@@ -69,10 +67,6 @@ export class PubspecViewProvider extends TreeDataProviderBase<PubspecItem> {
   private setPubCancel(cancel: boolean) {
     this.pubCancel = cancel;
     setContext('dart_sharp.pubCancel', this.pubCancel);
-  }
-
-  private async openPubDev() {
-    return commands.executeCommand(VSCODE_OPEN, Uri.parse('https://pub.dev/'));
   }
 
   private isCancel() {

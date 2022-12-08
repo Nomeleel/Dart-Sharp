@@ -1,8 +1,7 @@
-import * as fs from "fs";
-import { join } from "path";
 import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, commands, Disposable, languages, Position, Range, Selection, SymbolInformation, TextDocument, Uri, workspace, WorkspaceEdit } from "vscode";
 import { DART_MODE } from "../constant/constant";
 import { VSCODE_EXECUTE_CODE_ACTION_PROVIDER, VSCODE_EXECUTE_WORKSPACE_SYMBOL_PROVIDER } from "../constant/vscode";
+import { dependencyPackages, Package } from "../util/packages";
 
 const quickImportImportCodeActionKind = 'quickfix.import';
 export class QuickFixImportProvider implements CodeActionProvider {
@@ -57,36 +56,12 @@ export class QuickFixImportProvider implements CodeActionProvider {
   /// .dart_tool/package_config.json or .packages
   public collectPackages(): any {
     let workspacePath = workspace.workspaceFolders![0].uri.path;
-    let packageConfigPath = join(workspacePath, '.dart_tool', 'package_config.json');
-    if (fs.existsSync(packageConfigPath)) {
-      let content = fs.readFileSync(packageConfigPath, 'utf-8');
-      this.packages = JSON.parse(content).packages as Package[];
-
-      this.packages.forEach((pkg) => {
-        if (pkg.rootUri.startsWith('file://')) {
-          pkg.absolutePath = Uri.parse(pkg.rootUri).path;
-        } else if (pkg.rootUri.startsWith('../')) {
-          pkg.absolutePath = Uri.joinPath(Uri.file(workspacePath), 'lib', pkg.rootUri).path;
-        }
-      });
-    }
+    this.packages = dependencyPackages(workspacePath);
 
     //TODO(Nomeleel) .packages
   }
 
   public dispose(): any {
     this.disposables.forEach((e) => e.dispose());
-  }
-}
-
-class Package {
-  public name: string;
-  public rootUri: string;
-  public absolutePath: string;
-
-  constructor(name: string, rootUri: string) {
-    this.name = name;
-    this.rootUri = rootUri;
-    this.absolutePath = rootUri;
   }
 }

@@ -19,3 +19,7 @@ export async function getTextRangeFromPosition(uri: Uri, position: Position): Pr
   let textDocument = await workspace.openTextDocument(uri);
   return textDocument.getWordRangeAtPosition(position) ?? new Range(position, position);
 }
+
+export function activeSelectionText(): string | undefined {
+  return window.activeTextEditor?.document.getText(window.activeTextEditor?.selection);
+}
