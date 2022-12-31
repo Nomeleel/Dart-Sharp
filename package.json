@@ -6,9 +6,9 @@
 	"homepage": "https://github.com/Nomeleel",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Nomeleel/VS-Code-Extension-Collection/tree/master/dart%20sharp"
+		"url": "https://github.com/Nomeleel/Dart-Sharp"
 	},
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"engines": {
 		"vscode": "^1.46.0"
 	},
@@ -57,7 +57,7 @@
 				"category": "Pub",
 				"icon": "./resource/icon/cancel.png"
 			},
-      {
+			{
 				"command": "dart_sharp.pub.dev",
 				"title": "Open Pub Dev",
 				"category": "Pub"
@@ -70,17 +70,17 @@
 			{
 				"command": "dart_sharp.newDartFile",
 				"title": "New Dart File",
-        "icon": "./resource/icon/dart.svg"
+				"icon": "./resource/icon/dart.svg"
 			},
-      {
+			{
 				"command": "dart_sharp.searchSymbol",
 				"title": "Search Symbol"
 			},
-      {
+			{
 				"command": "dart_sharp.symbolRelation",
 				"title": "Symbol Relation"
 			},
-      {
+			{
 				"command": "dart_sharp.copyCommentary",
 				"title": "Copy Commentary"
 			}
@@ -91,19 +91,19 @@
 				"key": "ctrl+tab",
 				"when": "editorLangId == dart"
 			},
-      {
+			{
 				"command": "dart_sharp.newDartFile",
 				"key": "ctrl+shift+d"
 			},
-      {
+			{
 				"command": "dart_sharp.searchSymbol",
 				"key": "ctrl+shift+s"
 			},
-      {
+			{
 				"command": "dart_sharp.symbolRelation",
 				"key": "ctrl+shift+r"
 			},
-      {
+			{
 				"command": "dart_sharp.copyCommentary",
 				"key": "ctrl+shift+c"
 			}
@@ -115,7 +115,7 @@
 					"name": "Pubspec",
 					"when": "dart-code:anyFlutterProjectLoaded && dart-code:showFlutterOutline"
 				},
-        {
+				{
 					"id": "symbolRelation.view",
 					"name": "Symbol Relation",
 					"when": "dart-code:anyFlutterProjectLoaded"
@@ -123,30 +123,30 @@
 			]
 		},
 		"menus": {
-      "explorer/context": [
-        {
-          "command": "dart_sharp.newDartFile",
-          "group": "1_explorer_context_group",
-          "when": "explorerResourceIsFolder"
-        }
-      ],
-      "editor/context": [
+			"explorer/context": [
+				{
+					"command": "dart_sharp.newDartFile",
+					"group": "1_explorer_context_group",
+					"when": "explorerResourceIsFolder"
+				}
+			],
+			"editor/context": [
 				{
 					"command": "dart_sharp.newDartFile",
 					"group": "1_editor_context_group",
 					"when": "resourceScheme == file"
 				},
-        {
+				{
 					"command": "dart_sharp.symbolRelation",
 					"group": "1_editor_context_group",
 					"when": "resourceScheme == file && editorLangId == dart"
 				},
-        {
+				{
 					"command": "dart_sharp.copyCommentary",
 					"group": "0_editor_context_group",
 					"when": "resourceScheme == file && editorLangId == dart"
 				},
-        {
+				{
 					"command": "dart_sharp.pub.dev",
 					"group": "navigation"
 				},
@@ -156,13 +156,13 @@
 					"group": "navigation"
 				}
 			],
-      "editor/title": [
-        {
+			"editor/title": [
+				{
 					"command": "dart_sharp.newDartFile",
 					"group": "1_editor_title_group",
-          "when": "resourceScheme == file"
+					"when": "resourceScheme == file"
 				}
-      ],
+			],
 			"view/title": [
 				{
 					"command": "dart_sharp.pub.get",
