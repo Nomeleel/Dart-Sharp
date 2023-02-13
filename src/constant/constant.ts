@@ -15,6 +15,8 @@ export const ADD_DART_FILE_COMMAND = `${NAME_SPEACE}.newDartFile`;
 export const SEARCH_SYMBOL_COMMAND = `${NAME_SPEACE}.searchSymbol`;
 export const SYMBOL_RELATION_COMMAND = `${NAME_SPEACE}.symbolRelation`;
 export const COPY_COMMENTARY_COMMAND = `${NAME_SPEACE}.copyCommentary`;
+export const WRAP_WITH_WIDGET_COMMAND = `${NAME_SPEACE}.wrapWithWidget`;
+
 // pub
 export const PUB_DEV = `${NAME_SPEACE}.pub.dev`;
 export const PUB_UPGRADE_SPECIFIC = `${NAME_SPEACE}.pub.upgrade.specific`;

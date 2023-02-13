@@ -14,6 +14,7 @@ import { SearchSymbolCommand } from './command/search_symbol_command';
 import { SymbolRelationProvider } from './provider/symbol_relation_provider';
 import { CopyCommentaryCommand } from './command/copy_commentary_command';
 import { PubExtensionCommand } from './command/pub_extension_command';
+import { WrapWithWidgetCommand } from './command/wrap_with_widget_command';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -25,6 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(new SearchSymbolCommand());
   context.subscriptions.push(new CopyCommentaryCommand());
   context.subscriptions.push(new PubExtensionCommand());
+  context.subscriptions.push(new WrapWithWidgetCommand());
   
   /// Provider
   context.subscriptions.push(new DatWrapCodeActionProvider());

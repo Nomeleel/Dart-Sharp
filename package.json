@@ -83,6 +83,10 @@
 			{
 				"command": "dart_sharp.copyCommentary",
 				"title": "Copy Commentary"
+			},
+      {
+				"command": "dart_sharp.wrapWithWidget",
+				"title": "Wrap With Widget"
 			}
 		],
 		"keybindings": [
@@ -106,6 +110,10 @@
 			{
 				"command": "dart_sharp.copyCommentary",
 				"key": "ctrl+shift+c"
+			},
+      {
+				"command": "dart_sharp.wrapWithWidget",
+				"key": "ctrl+shift+w"
 			}
 		],
 		"views": {
@@ -141,6 +149,11 @@
 					"group": "1_editor_context_group",
 					"when": "resourceScheme == file && editorLangId == dart"
 				},
+        {
+          "command": "dart_sharp.wrapWithWidget",
+          "when": "resourceScheme == file && editorLangId == dart",
+          "group": "1_editor_context_group"
+        },
 				{
 					"command": "dart_sharp.copyCommentary",
 					"group": "0_editor_context_group",
