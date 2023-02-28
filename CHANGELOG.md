@@ -49,3 +49,7 @@
 ## [0.1.1]
 
 - Refine project.
+
+## [0.1.2]
+
+- Add wrap with widget command, provide quick pick way selected widget of wrap.

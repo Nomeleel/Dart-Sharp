@@ -1,229 +1,229 @@
 {
-	"name": "dart-sharp",
-	"displayName": "dart sharp",
-	"description": "Dart Sharp extension.",
-	"publisher": "Nomeleel",
-	"homepage": "https://github.com/Nomeleel",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Nomeleel/Dart-Sharp"
-	},
-	"version": "0.1.1",
-	"engines": {
-		"vscode": "^1.46.0"
-	},
-	"categories": [
-		"Snippets",
-		"Programming Languages"
-	],
-	"activationEvents": [
-		"onLanguage:dart",
-		"workspaceContains:pubspec.yaml",
-		"workspaceContains:*/pubspec.yaml",
-		"workspaceContains:*/*/pubspec.yaml",
-		"workspaceContains:*.dart",
-		"workspaceContains:*/*.dart",
-		"workspaceContains:*/*/*.dart"
-	],
-	"main": "./out/extension.js",
-	"icon": "resource/icon/dart_sharp.png",
-	"contributes": {
-		"commands": [
-			{
-				"command": "dart_sharp.toggleFormat",
-				"title": "Toggle Format"
-			},
-			{
-				"command": "dart_sharp.pub.get",
-				"title": "Get All Packages",
-				"category": "Pub",
-				"icon": {
-					"light": "./resource/icon/get_light.svg",
-					"dark": "./resource/icon/get_dark.svg"
-				}
-			},
-			{
-				"command": "dart_sharp.pub.upgrade",
-				"title": "Upgrade All Packages",
-				"category": "Pub",
-				"icon": {
-					"light": "./resource/icon/upgrade_light.svg",
-					"dark": "./resource/icon/upgrade_dark.svg"
-				}
-			},
-			{
-				"command": "dart_sharp.pub.cancel",
-				"title": "Cancel Pub Action",
-				"category": "Pub",
-				"icon": "./resource/icon/cancel.png"
-			},
-			{
-				"command": "dart_sharp.pub.dev",
-				"title": "Open Pub Dev",
-				"category": "Pub"
-			},
-			{
-				"command": "dart_sharp.pub.upgrade.specific",
-				"title": "Pub Upgrade Specific",
-				"category": "Pub"
-			},
-			{
-				"command": "dart_sharp.newDartFile",
-				"title": "New Dart File",
-				"icon": "./resource/icon/dart.svg"
-			},
-			{
-				"command": "dart_sharp.searchSymbol",
-				"title": "Search Symbol"
-			},
-			{
-				"command": "dart_sharp.symbolRelation",
-				"title": "Symbol Relation"
-			},
-			{
-				"command": "dart_sharp.copyCommentary",
-				"title": "Copy Commentary"
-			},
+  "name": "dart-sharp",
+  "displayName": "dart sharp",
+  "description": "Dart Sharp extension.",
+  "publisher": "Nomeleel",
+  "homepage": "https://github.com/Nomeleel",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nomeleel/Dart-Sharp"
+  },
+  "version": "0.1.2",
+  "engines": {
+    "vscode": "^1.46.0"
+  },
+  "categories": [
+    "Snippets",
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:dart",
+    "workspaceContains:pubspec.yaml",
+    "workspaceContains:*/pubspec.yaml",
+    "workspaceContains:*/*/pubspec.yaml",
+    "workspaceContains:*.dart",
+    "workspaceContains:*/*.dart",
+    "workspaceContains:*/*/*.dart"
+  ],
+  "main": "./out/extension.js",
+  "icon": "resource/icon/dart_sharp.png",
+  "contributes": {
+    "commands": [
       {
-				"command": "dart_sharp.wrapWithWidget",
-				"title": "Wrap With Widget"
-			}
-		],
-		"keybindings": [
-			{
-				"command": "dart_sharp.toggleFormat",
-				"key": "ctrl+tab",
-				"when": "editorLangId == dart"
-			},
-			{
-				"command": "dart_sharp.newDartFile",
-				"key": "ctrl+shift+d"
-			},
-			{
-				"command": "dart_sharp.searchSymbol",
-				"key": "ctrl+shift+s"
-			},
-			{
-				"command": "dart_sharp.symbolRelation",
-				"key": "ctrl+shift+r"
-			},
-			{
-				"command": "dart_sharp.copyCommentary",
-				"key": "ctrl+shift+c"
-			},
+        "command": "dart_sharp.toggleFormat",
+        "title": "Toggle Format"
+      },
       {
-				"command": "dart_sharp.wrapWithWidget",
-				"key": "ctrl+shift+w"
-			}
-		],
-		"views": {
-			"flutter": [
-				{
-					"id": "pubspec.view",
-					"name": "Pubspec",
-					"when": "dart-code:anyFlutterProjectLoaded && dart-code:showFlutterOutline"
-				},
-				{
-					"id": "symbolRelation.view",
-					"name": "Symbol Relation",
-					"when": "dart-code:anyFlutterProjectLoaded"
-				}
-			]
-		},
-		"menus": {
-			"explorer/context": [
-				{
-					"command": "dart_sharp.newDartFile",
-					"group": "1_explorer_context_group",
-					"when": "explorerResourceIsFolder"
-				}
-			],
-			"editor/context": [
-				{
-					"command": "dart_sharp.newDartFile",
-					"group": "1_editor_context_group",
-					"when": "resourceScheme == file"
-				},
-				{
-					"command": "dart_sharp.symbolRelation",
-					"group": "1_editor_context_group",
-					"when": "resourceScheme == file && editorLangId == dart"
-				},
+        "command": "dart_sharp.pub.get",
+        "title": "Get All Packages",
+        "category": "Pub",
+        "icon": {
+          "light": "./resource/icon/get_light.svg",
+          "dark": "./resource/icon/get_dark.svg"
+        }
+      },
+      {
+        "command": "dart_sharp.pub.upgrade",
+        "title": "Upgrade All Packages",
+        "category": "Pub",
+        "icon": {
+          "light": "./resource/icon/upgrade_light.svg",
+          "dark": "./resource/icon/upgrade_dark.svg"
+        }
+      },
+      {
+        "command": "dart_sharp.pub.cancel",
+        "title": "Cancel Pub Action",
+        "category": "Pub",
+        "icon": "./resource/icon/cancel.png"
+      },
+      {
+        "command": "dart_sharp.pub.dev",
+        "title": "Open Pub Dev",
+        "category": "Pub"
+      },
+      {
+        "command": "dart_sharp.pub.upgrade.specific",
+        "title": "Pub Upgrade Specific",
+        "category": "Pub"
+      },
+      {
+        "command": "dart_sharp.newDartFile",
+        "title": "New Dart File",
+        "icon": "./resource/icon/dart.svg"
+      },
+      {
+        "command": "dart_sharp.searchSymbol",
+        "title": "Search Symbol"
+      },
+      {
+        "command": "dart_sharp.symbolRelation",
+        "title": "Symbol Relation"
+      },
+      {
+        "command": "dart_sharp.copyCommentary",
+        "title": "Copy Commentary"
+      },
+      {
+        "command": "dart_sharp.wrapWithWidget",
+        "title": "Wrap With Widget"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "dart_sharp.toggleFormat",
+        "key": "ctrl+tab",
+        "when": "editorLangId == dart"
+      },
+      {
+        "command": "dart_sharp.newDartFile",
+        "key": "ctrl+shift+d"
+      },
+      {
+        "command": "dart_sharp.searchSymbol",
+        "key": "ctrl+shift+s"
+      },
+      {
+        "command": "dart_sharp.symbolRelation",
+        "key": "ctrl+shift+r"
+      },
+      {
+        "command": "dart_sharp.copyCommentary",
+        "key": "ctrl+shift+c"
+      },
+      {
+        "command": "dart_sharp.wrapWithWidget",
+        "key": "ctrl+shift+w"
+      }
+    ],
+    "views": {
+      "flutter": [
+        {
+          "id": "pubspec.view",
+          "name": "Pubspec",
+          "when": "dart-code:anyFlutterProjectLoaded && dart-code:showFlutterOutline"
+        },
+        {
+          "id": "symbolRelation.view",
+          "name": "Symbol Relation",
+          "when": "dart-code:anyFlutterProjectLoaded"
+        }
+      ]
+    },
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "dart_sharp.newDartFile",
+          "group": "1_explorer_context_group",
+          "when": "explorerResourceIsFolder"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "dart_sharp.newDartFile",
+          "group": "1_editor_context_group",
+          "when": "resourceScheme == file"
+        },
+        {
+          "command": "dart_sharp.symbolRelation",
+          "group": "1_editor_context_group",
+          "when": "resourceScheme == file && editorLangId == dart"
+        },
         {
           "command": "dart_sharp.wrapWithWidget",
           "when": "resourceScheme == file && editorLangId == dart",
           "group": "1_editor_context_group"
         },
-				{
-					"command": "dart_sharp.copyCommentary",
-					"group": "0_editor_context_group",
-					"when": "resourceScheme == file && editorLangId == dart"
-				},
-				{
-					"command": "dart_sharp.pub.dev",
-					"group": "navigation"
-				},
-				{
-					"command": "dart_sharp.pub.upgrade.specific",
-					"when": "resourceFilename == pubspec.yaml && dart-code:anyFlutterProjectLoaded",
-					"group": "navigation"
-				}
-			],
-			"editor/title": [
-				{
-					"command": "dart_sharp.newDartFile",
-					"group": "1_editor_title_group",
-					"when": "resourceScheme == file"
-				}
-			],
-			"view/title": [
-				{
-					"command": "dart_sharp.pub.get",
-					"when": "view == pubspec.view && !dart_sharp.pubCancel",
-					"group": "navigation"
-				},
-				{
-					"command": "dart_sharp.pub.upgrade",
-					"when": "view == pubspec.view && !dart_sharp.pubCancel",
-					"group": "navigation"
-				},
-				{
-					"command": "dart_sharp.pub.cancel",
-					"when": "view == pubspec.view && dart_sharp.pubCancel",
-					"group": "navigation"
-				}
-			]
-		},
-		"snippets": [
-			{
-				"language": "dart",
-				"path": "./snippets/wrap.json"
-			},
-			{
-				"language": "dart",
-				"path": "./snippets/flutter.json"
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.46.0",
-		"@types/glob": "^7.1.3",
-		"@types/mocha": "^8.0.0",
-		"@types/node": "^12.11.7",
-		"eslint": "^7.9.0",
-		"@typescript-eslint/eslint-plugin": "^4.1.1",
-		"@typescript-eslint/parser": "^4.1.1",
-		"glob": "^7.1.6",
-		"mocha": "^8.1.3",
-		"typescript": "^4.0.2",
-		"vscode-test": "^1.4.0"
-	}
+        {
+          "command": "dart_sharp.copyCommentary",
+          "group": "0_editor_context_group",
+          "when": "resourceScheme == file && editorLangId == dart"
+        },
+        {
+          "command": "dart_sharp.pub.dev",
+          "group": "navigation"
+        },
+        {
+          "command": "dart_sharp.pub.upgrade.specific",
+          "when": "resourceFilename == pubspec.yaml && dart-code:anyFlutterProjectLoaded",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "dart_sharp.newDartFile",
+          "group": "1_editor_title_group",
+          "when": "resourceScheme == file"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "dart_sharp.pub.get",
+          "when": "view == pubspec.view && !dart_sharp.pubCancel",
+          "group": "navigation"
+        },
+        {
+          "command": "dart_sharp.pub.upgrade",
+          "when": "view == pubspec.view && !dart_sharp.pubCancel",
+          "group": "navigation"
+        },
+        {
+          "command": "dart_sharp.pub.cancel",
+          "when": "view == pubspec.view && dart_sharp.pubCancel",
+          "group": "navigation"
+        }
+      ]
+    },
+    "snippets": [
+      {
+        "language": "dart",
+        "path": "./snippets/wrap.json"
+      },
+      {
+        "language": "dart",
+        "path": "./snippets/flutter.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.46.0",
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^12.11.7",
+    "eslint": "^7.9.0",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "glob": "^7.1.6",
+    "mocha": "^8.1.3",
+    "typescript": "^4.0.2",
+    "vscode-test": "^1.4.0"
+  }
 }
