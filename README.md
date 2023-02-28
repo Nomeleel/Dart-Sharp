@@ -15,7 +15,11 @@ Dart extension plus，在Dart插件的基础上扩展一些稀奇古怪的功能
 
 ## 嵌套自定义Widget
 
+使用**Refactor...**
 ![wrap](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/wrap.gif)
+
+使用**Wrap With Widget** 或快捷键: ***ctrl+shift+w***
+![wrap_with_widget_show_quick_pick](https://raw.githubusercontent.com/Nomeleel/Assets/master/vs_code_extension_collection/markdown/dart_sharp/wrap_with_widget_show_quick_pick.gif)
 
 自定义snippet文件目录: ***.vscode/wrap.code-snippets***
 替换标识位: ***推荐使用后两种***(更符合[Snippet Syntax](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax))
