@@ -1,4 +1,4 @@
-import { CancellationToken, CodeLens, CodeLensProvider, Disposable, DocumentLink, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, ProviderResult, Range, TextDocument, Uri, window } from "vscode";
+import { CancellationToken, CodeLens, CodeLensProvider, DocumentLink, Hover, languages, LocationLink, MarkdownString, Position, ProviderResult, Range, TextDocument, Uri, window } from "vscode";
 import { documentCommentPrefixSlash, getRangeCommentaryText } from "../command/copy_commentary_command";
 import { RegExpProvider } from "../common/regexp_provider";
 import { COPY_COMMENTARY_COMMAND, DART_MODE } from "../constant/constant";
@@ -8,9 +8,8 @@ const markDownCodeInDocumentComment = `${documentCommentPrefixSlash}\`\`\``;
 const dartCodeRegExp = RegExp(`(?<=${markDownCodeInDocumentComment}dart)[^\`]*(?=${markDownCodeInDocumentComment})`, 'gmi');
 const flutterExampleLinkRegExp = /(?<=\\*\\* See code in )\S+(?= \\*\\*)/gmi;
 
-export class CommentaryExampleProvider extends RegExpProvider implements CodeLensProvider, HoverProvider {
+export class CommentaryExampleProvider extends RegExpProvider implements CodeLensProvider {
 
-  public disposables: Disposable[] = [];
   private flutterSdkPath: string = '';
 
   constructor() {
@@ -105,9 +104,5 @@ export class CommentaryExampleProvider extends RegExpProvider implements CodeLen
     }
 
     return Uri.file(`${this.flutterSdkPath}${path}`);
-  }
-
-  public dispose(): any {
-    this.disposables.forEach((e) => e.dispose());
   }
 }

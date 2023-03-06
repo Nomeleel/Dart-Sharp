@@ -1,5 +1,5 @@
 import * as path from "path";
-import { CancellationToken, DefinitionProvider, Disposable, DocumentLink, DocumentLinkProvider, Hover, HoverProvider, languages, LocationLink, MarkdownString, Position, Range, TextDocument, Uri, workspace } from "vscode";
+import { CancellationToken, DocumentLink, Hover, languages, LocationLink, MarkdownString, Position, Range, TextDocument, Uri, workspace } from "vscode";
 import { RegExpProvider } from "../common/regexp_provider";
 import { DART_MODE } from "../constant/constant";
 
@@ -9,8 +9,7 @@ const assetRegExp = new RegExp(`(?<=["'])[^\\s:]+\\.${assetExtension}(?=["'])`, 
 const netAssetRegExp = new RegExp(`(?<=["'])https?://[^\\s:]+\\.(${mdAssetExtension})(?=["'])`, 'gmi');
 const matchAll = '**/';
 
-export class AssetProvider extends RegExpProvider implements DefinitionProvider, HoverProvider, DocumentLinkProvider, Disposable {
-  public disposables: Disposable[] = [];
+export class AssetProvider extends RegExpProvider {
 
   constructor() {
     super(assetRegExp);
@@ -97,9 +96,5 @@ export class AssetProvider extends RegExpProvider implements DefinitionProvider,
     let searchPath = `${searchDir}${pathText.substring(splitIndex)}`;
     // TODO(Nomeleel): 应该只对项目资源文件夹内进行搜索 排除build产物中的资源文件
     return workspace.findFiles(searchPath, '**/build/**');
-  }
-
-  public dispose() {
-    this.disposables.forEach(e => e.dispose());
   }
 }

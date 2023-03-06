@@ -1,20 +1,20 @@
 import * as vscode from 'vscode';
-import { NewDartFileCommand } from './command/new_dart_file_command';
+import { CopyCommentaryCommand } from './command/copy_commentary_command';
 import { JumpToEditorCommand } from './command/jump_to_editor_command';
+import { NewDartFileCommand } from './command/new_dart_file_command';
+import { PubExtensionCommand } from './command/pub_extension_command';
+import { SearchSymbolCommand } from './command/search_symbol_command';
 import { ToggleFormatCommand } from './command/toggle_format_command';
 import { WrapSnippetCommand } from './command/wrap_snippet_command';
+import { WrapWithWidgetCommand } from './command/wrap_with_widget_command';
 import { DartColorDecoration } from './decoration/dart_color_decoration';
 import { AssetProvider } from './provider/asset_provider';
 import { CommentaryExampleProvider } from './provider/commentary_example_provider';
+import { DartCodingStyleCompletionItemProvider } from './provider/dart_coding_style_completion_item_provider';
 import { DatWrapCodeActionProvider } from './provider/dart_wrap_code_action_provider';
 import { PubspecViewProvider } from './provider/pubspec_view_provider';
-import { FormatStatusBar } from './statusbar/format_status_bar';
-import { DartCodingStyleCompletionItemProvider } from './provider/dart_coding_style_completion_item_provider';
-import { SearchSymbolCommand } from './command/search_symbol_command';
 import { SymbolRelationProvider } from './provider/symbol_relation_provider';
-import { CopyCommentaryCommand } from './command/copy_commentary_command';
-import { PubExtensionCommand } from './command/pub_extension_command';
-import { WrapWithWidgetCommand } from './command/wrap_with_widget_command';
+import { FormatStatusBar } from './statusbar/format_status_bar';
 
 export function activate(context: vscode.ExtensionContext) {
 

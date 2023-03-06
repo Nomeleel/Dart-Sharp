@@ -27,5 +27,5 @@ export async function formatScope(action: Function) {
 }
 
 export async function formatSelection() {
-  await commands.executeCommand('editor.action.formatSelection');
+  return commands.executeCommand('editor.action.formatSelection');
 }

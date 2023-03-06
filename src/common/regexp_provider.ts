@@ -1,11 +1,13 @@
 import { CancellationToken, DefinitionProvider, DocumentLink, DocumentLinkProvider, Hover, HoverProvider, LocationLink, Position, Range, TextDocument } from "vscode";
 import { getRange } from "../util/util";
+import { DisposableBase } from "./disposable_base";
 
-export abstract class RegExpProvider implements DocumentLinkProvider, DefinitionProvider, HoverProvider {
+export abstract class RegExpProvider extends DisposableBase implements DocumentLinkProvider, DefinitionProvider, HoverProvider {
 
   readonly regExp: RegExp;
 
   constructor(regExp: RegExp) {
+    super();
     this.regExp = regExp;
   }
 

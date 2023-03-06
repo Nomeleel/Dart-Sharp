@@ -1,16 +1,16 @@
-import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, commands, Disposable, languages, Position, Range, Selection, SymbolInformation, TextDocument, Uri, workspace, WorkspaceEdit } from "vscode";
+import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, commands, languages, Position, Range, Selection, SymbolInformation, TextDocument, workspace, WorkspaceEdit } from "vscode";
+import { DisposableBase } from "../common/disposable_base";
 import { DART_MODE } from "../constant/constant";
 import { VSCODE_EXECUTE_CODE_ACTION_PROVIDER, VSCODE_EXECUTE_WORKSPACE_SYMBOL_PROVIDER } from "../constant/vscode";
 import { dependencyPackages, Package } from "../util/packages";
 
 const quickImportImportCodeActionKind = 'quickfix.import';
-export class QuickFixImportProvider implements CodeActionProvider {
-
-  public disposables: Disposable[] = [];
+export class QuickFixImportProvider extends DisposableBase implements CodeActionProvider {
 
   public packages?: Package[];
 
   constructor() {
+    super();
     this.disposables.push(
       languages.registerCodeActionsProvider(DART_MODE, this),
     );
@@ -59,9 +59,5 @@ export class QuickFixImportProvider implements CodeActionProvider {
     this.packages = dependencyPackages(workspacePath);
 
     //TODO(Nomeleel) .packages
-  }
-
-  public dispose(): any {
-    this.disposables.forEach((e) => e.dispose());
   }
 }

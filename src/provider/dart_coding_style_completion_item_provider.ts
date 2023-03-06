@@ -1,4 +1,5 @@
-import { CancellationToken, CompletionContext, CompletionItem, CompletionItemProvider, CompletionList, Disposable, languages, Position, ProviderResult, TextDocument } from "vscode";
+import { CancellationToken, CompletionContext, CompletionItem, CompletionItemProvider, CompletionList, languages, Position, ProviderResult, TextDocument } from "vscode";
+import { DisposableBase } from "../common/disposable_base";
 import { DART_MODE } from "../constant/constant";
 
 const rightParentheses = ')';
@@ -6,11 +7,10 @@ const triggerCharacters = [rightParentheses];
 const triggerCharactersRegExp = new RegExp(`[${triggerCharacters.join()}]`);
 const comma = ',';
 
-export class DartCodingStyleCompletionItemProvider implements CompletionItemProvider {
-
-  public disposables: Disposable[] = [];
+export class DartCodingStyleCompletionItemProvider extends DisposableBase implements CompletionItemProvider {
 
   constructor() {
+    super();
     this.disposables.push(
       languages.registerCompletionItemProvider(DART_MODE, this, ...triggerCharacters),
     );
@@ -29,9 +29,5 @@ export class DartCodingStyleCompletionItemProvider implements CompletionItemProv
       }
     }
     return items;
-  }
-
-  public dispose(): any {
-    this.disposables.forEach((e) => e.dispose());
   }
 }

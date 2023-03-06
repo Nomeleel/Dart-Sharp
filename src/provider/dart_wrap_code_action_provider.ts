@@ -1,5 +1,6 @@
 import * as fs from "fs";
-import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, commands, Disposable, languages, Position, Range, Selection, TextDocument, TextEditor, Uri, window, workspace } from "vscode";
+import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, commands, languages, Position, Range, Selection, TextDocument, TextEditor, Uri, window, workspace } from "vscode";
+import { DisposableBase } from "../common/disposable_base";
 import { DART_MODE, WRAP_SNIPPET_COMMAND } from "../constant/constant";
 import { VSCODE_EXECUTE_CODE_ACTION_PROVIDER } from "../constant/vscode";
 import { getExtensionSnippetPath } from "../util/util";
@@ -9,13 +10,13 @@ const rightBracket = ')';
 const snippetFilePath = '.vscode/wrap.code-snippets';
 
 const wrapWidgetCodeActionKind = 'refactor.flutter.wrap.generic';
-export class DatWrapCodeActionProvider implements CodeActionProvider {
+export class DatWrapCodeActionProvider extends DisposableBase implements CodeActionProvider {
 
-  public disposables: Disposable[] = [];
   public commonSnippetList?: Snippet[];
   public customSnippetList?: Snippet[];
 
   constructor() {
+    super();
     this.disposables.push(
       languages.registerCodeActionsProvider(DART_MODE, this),
       workspace.onDidSaveTextDocument((e) => this.listenCustomSnippetFile(e)),
@@ -110,10 +111,6 @@ export class DatWrapCodeActionProvider implements CodeActionProvider {
         this.customSnippetList = snippetList;
       }
     }
-  }
-
-  public dispose(): any {
-    this.disposables.forEach((e) => e.dispose());
   }
 }
 

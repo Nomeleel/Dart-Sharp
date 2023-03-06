@@ -2,7 +2,7 @@ import { Position, Range, TextDocument, TextEditor, Uri, window, workspace } fro
 
 export async function openTextDocument(path: string | Uri): Promise<TextEditor> {
   let textDocument = typeof(path) === 'string' ? await workspace.openTextDocument(path) : await workspace.openTextDocument(path);
-  return await window.showTextDocument(textDocument);
+  return window.showTextDocument(textDocument);
 }
 
 export function getRangeText(range?: Range, document?: TextDocument): string | undefined {
