@@ -1,8 +1,7 @@
-import * as path from "path";
 import { Command, commands, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
 import { TreeDataProviderBase } from "../common/tree_data_provider_base";
 import { jumpToCommand } from "../util/command";
-import { getExtensionIconPath, setContext } from "../util/util";
+import { getExtensionIconPath, lastDir, setContext } from "../util/util";
 
 export class PubspecViewProvider extends TreeDataProviderBase<PubspecItem> {
 
@@ -30,9 +29,8 @@ export class PubspecViewProvider extends TreeDataProviderBase<PubspecItem> {
       rootNode = new PubspecItem('Pubspec View');
       let children = this.pubFiles.map((uri) => {
         let relativePath = workspace.asRelativePath(uri);
-        let dirList = path.parse(uri.path).dir.split(path.sep);
         let command = jumpToCommand(uri);
-        let pub = new PubspecItem(dirList[dirList.length - 1], uri, command);
+        let pub = new PubspecItem(lastDir(uri.path), uri, command);
         pub.setChildren([new PubspecItem(relativePath, uri, command)]);
         return pub;
       });

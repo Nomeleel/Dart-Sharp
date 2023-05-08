@@ -1,9 +1,9 @@
-import { join } from "path";
+import { join, parse, sep } from "path";
 import { commands, extensions, Location, Position, Range, TextDocument, TextEdit, TextEditor, Uri, window, workspace, WorkspaceEdit } from "vscode";
 import { EXTENSION_NAME, PUBLISHER } from "../constant/constant";
 
 // TODO(Nomeleel): 分类
- 
+
 export function activePositionText(): string | undefined {
   if (window.activeTextEditor) {
     let textEditor = window.activeTextEditor;
@@ -55,7 +55,7 @@ export async function getTextFromLocation(location: Location): Promise<string> {
 
 export async function getTextFromLocationFillRange(location: Location): Promise<string> {
   let textDocument = await workspace.openTextDocument(location.uri);
-  return textDocument.getText(new Range(new Position(location.range.start.line, 0), textDocument.positionAt(textDocument.offsetAt(new Position(location.range.end.line + 1 , 0)) - 1)));
+  return textDocument.getText(new Range(new Position(location.range.start.line, 0), textDocument.positionAt(textDocument.offsetAt(new Position(location.range.end.line + 1, 0)) - 1)));
 }
 
 export function rangesOfOne(textEditor: TextEditor, searchText: string): Range | undefined {
@@ -129,4 +129,10 @@ export function compensateForVsCodeIndenting(newText: string, leadingIndentChara
   const indent = " ".repeat(leadingIndentCharacters);
   const indentPattern = new RegExp(`\n${indent}`, "g");
   return newText.replace(indentPattern, "\n");
+}
+
+export function lastDir(fullPath: string, isDir = false, offset = 0): string {
+  let dirList = (isDir ? fullPath : parse(fullPath).dir).split(sep);
+  if (offset < 0 || offset >= dirList.length) offset = 0;
+  return dirList[dirList.length - 1 - offset];
 }
