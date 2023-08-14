@@ -15,6 +15,7 @@ import { DatWrapCodeActionProvider } from './provider/dart_wrap_code_action_prov
 import { PubspecViewProvider } from './provider/pubspec_view_provider';
 import { SymbolRelationProvider } from './provider/symbol_relation_provider';
 import { FormatStatusBar } from './statusbar/format_status_bar';
+import { ReferenceCheckCommand } from './command/reference_check_command';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -27,6 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(new CopyCommentaryCommand());
   context.subscriptions.push(new PubExtensionCommand());
   context.subscriptions.push(new WrapWithWidgetCommand());
+  context.subscriptions.push(new ReferenceCheckCommand());
   
   /// Provider
   context.subscriptions.push(new DatWrapCodeActionProvider());

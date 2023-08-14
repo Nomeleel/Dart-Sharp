@@ -87,6 +87,10 @@
       {
         "command": "dart_sharp.wrapWithWidget",
         "title": "Wrap With Widget"
+      },
+      {
+        "command": "dart_sharp.referenceCheck",
+        "title": "Reference Check"
       }
     ],
     "keybindings": [
@@ -160,6 +164,11 @@
           "when": "resourceScheme == file && editorLangId == dart"
         },
         {
+          "command": "dart_sharp.referenceCheck",
+          "when": "resourceScheme == file && editorLangId == dart",
+          "group": "1_editor_context_group"
+        },
+        {
           "command": "dart_sharp.pub.dev",
           "group": "navigation"
         },
@@ -203,7 +212,19 @@
         "language": "dart",
         "path": "./snippets/flutter.json"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Dart Sharp",
+      "properties": {
+        "dart_sharp.referenceCheckRegExp": {
+          "type": "string",
+          "default": "(?<=(static (const )?(\\S* )?))\\S*(?=( =))",
+          "markdownDescription": "***Reference Check*** RegExp.",
+          "scope": "resource"
+        }
+      }
+    }
   },
   "extensionDependencies": [
 		"Dart-Code.dart-code"
